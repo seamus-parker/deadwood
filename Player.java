@@ -1,5 +1,14 @@
 public class Player
 {
+
+  private String name;
+
+  private int money;
+
+  private int credits;
+
+  private int rank;
+  
   public void getPossibleActions(String playerSetLocation){
     //call controller to display available actions
     //(actions include movement,upgrading,practicing,acting,taking a role)
@@ -29,4 +38,7 @@ public class Player
   public void rehearsal(){
     //player gets +1 to thier practice counter counter
   }
+
+  public Player(){}
+  
 }
