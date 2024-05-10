@@ -8,6 +8,8 @@ public class Player
   private int credits;
 
   private int rank;
+
+  private String role;
   
   public void getPossibleActions(String playerSetLocation){
     //call controller to display available actions
@@ -17,12 +19,26 @@ public class Player
     //displays options player has for movement
     //call on board
   }
-  public void getPossibleRoles(String playerSetLocation){
+  public String getPossibleRoles(String playerSetLocation){
     //check set and scene card of active player for open roles they qualify for
     //allow player to select one of the roles or decline
+    return sceneRoles + setRoles
   }
   public void act(int practiceChips, String currentRole){
     //roll die and add practiceChips
+    int budget = 0; //access xml file and assign budget of the current scene card
+    int dieRoll = 0; //roll die, assign result to dieRoll
+    int result = dieRoll + practiceChips;
+    if (budget <= result) {
+      //call function to remove a scene counter from current set
+      if (){ //if current role is on card
+        credits = credits + 2;
+      }else{
+        dollars = dollars +2;
+      }
+    }else{
+      System.out.println("Bad take, more soul next time");
+    }
     //compare result to budget
     //if successful determine payout for role
     //remove counter
@@ -36,7 +52,8 @@ public class Player
     return highestUpgrade;
   }
   public void rehearsal(){
-    //player gets +1 to thier practice counter counter
+    //player gets +1 to thier practice chips
+    practiceChips++;
   }
 
   public Player(){}
