@@ -60,7 +60,7 @@ public class Player
     credits += amount;
   }
   public void addDollars(int amount){
-    dollars += amount
+    dollars += amount;
   }
   public void resetPracticeChips(){
     practice chips = 0;
