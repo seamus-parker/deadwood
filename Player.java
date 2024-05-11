@@ -5,8 +5,13 @@ public class Player
   private int dollars = 0;
   private int credits = 0;
   private int rank = 1;
-  private String role;
-  public String getName{
+  private Role role;
+  private Room location;
+  
+  public setLocation (Room newLocation){
+    location = newLocation;
+  }
+  public String getName(){
     return name;
   }
   //need a class for current player role
@@ -16,13 +21,13 @@ public class Player
     //call controller to display available actions
     //(actions include movement,upgrading,practicing,acting,taking a role)
   }
-  public void getPossibleMoves(String playerSetLocation){
-    //displays options player has for movement
-    //call on board
+  public Set[] getPossibleMoves(){
+    return this.location.getNeighbors();
   }
-  public String getPossibleRoles(String playerSetLocation){
+  public String getPossibleRoles(String Location){
     //check set and scene card of active player for open roles they qualify for
     //allow player to select one of the roles or decline
+    
     return sceneRoles + setRoles;
   }
   public void act(int practiceChips, String currentRole){
@@ -31,14 +36,17 @@ public class Player
     int dieRoll = 0; //roll die, assign result to dieRoll
     int result = dieRoll + practiceChips;
     if (budget <= result) {
+        this.location.removeShotCounter();
       //call function to remove a scene counter from current set
-      if (roleOnSet(role)==True){ //if current role is on card
-        addDollars(2);
-      }else{
+      if (this.role.isOnCard()){ //if current role is on card
         addCredits(2);
+      }else{
+        addDollars(2);
       }
     }else{
-      System.out.println("Bad take, more soul next time");
+        if (!this.role.isOnCard()){
+            addDollars(1);
+        }
     }
     //compare result to budget
     //if successful determine payout for role
@@ -65,6 +73,7 @@ public class Player
   public void resetPracticeChips(){
     practice chips = 0;
   }
+}
 
   public Player(){}
   
