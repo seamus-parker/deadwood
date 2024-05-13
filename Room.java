@@ -4,12 +4,22 @@ public class Room {
 
     private Room[] neighbors;
 
+    private String[] neighborNames;
+
     Room[] getNeighbors() {
         return this.neighbors;
     }
 
     public void setNeighbors(Room[] myNeighbors) {
         this.neighbors = myNeighbors;
+    }
+
+    public void setNeighborNames(String[] myNeighbors) {
+        this.neighborNames = myNeighbors;
+    }
+
+    public String[] getNeighborNames() {
+        return this.neighborNames;
     }
 
     public String getName() {

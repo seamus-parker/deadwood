@@ -28,4 +28,11 @@ public class Role {
         return this.onCard;
     }
 
+    public void print() {
+        System.out.println("name: " + this.name);
+        System.out.println("level: " + Integer.toString(this.level));
+        System.out.println("line: " + this.line);
+        System.out.println("on card?: " + this.onCard);
+    }
+
 }
