@@ -82,7 +82,7 @@ public class Player
   public String getName(){
     return name;
   }
-  public Set[] getPossibleMoves(){
+  public Room[] getPossibleMoves(){
     return this.location.getNeighbors();
   }
   public String getPossibleRoles(String Location){
@@ -131,12 +131,12 @@ public class Player
       }else{
         addDollars(2);
       }
-      if (this.location.getShotcounters() == 0){
+      if (this.location.getShotCounters() == 0){
         resetPracticeChips();
         currentRole = null;
       }
     }else{
-        if (!this.role.isOnCard()){
+        if (!this.currentRole.isOnCard()){
             addDollars(1);
         }
     }
