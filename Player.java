@@ -1,25 +1,86 @@
 public class Player
 {
-
+  public Player(){}
+  //player attributes
   private String name;
   private int dollars = 0;
   private int credits = 0;
   private int rank = 1;
-  private Role role;
+  private Role currentRole;
   private Room location;
-  
-  public setLocation (Room newLocation){
+  private int practiceChips = 0;
+  private boolean hasMoved = false;
+  private boolean hasActedOrRehearsed = false;
+  //player attributes
+
+  //player setters
+  public void playerActedOrReheased(){
+    hasActedOrRehearsed = true;
+  }
+  public void resetActedOrReaheased(){
+    hasActedOrRehearsed = false;
+  }
+  public void playerMoved(){
+    hasMoved = true;
+  }
+  public void resetMove(){
+    hasMoved = false;
+  }
+  public void setName(String Name){
+    name = Name;
+  }
+  public void addCredits(int amount){
+    credits += amount;
+  }
+  public void setLocation(Room newLocation){
     location = newLocation;
+  }
+  public void addDollars(int amount){
+    dollars += amount;
+  }
+  public void resetPracticeChips(){
+    practiceChips = 0;
+  }
+  public void removeCredits(int amount){
+    credits -= amount;
+  }
+  public void removeDollars(int amount){
+    dollars -= amount;
+  }
+  public void upgradeRank(int newRank){
+    rank = newRank;
+  }
+  public void acceptRole(Role newRole){
+    currentRole = newRole; 
+  }
+  public void rehearsal(){
+    //player gets +1 to thier practice chips
+    hasActedOrRehearsed = true;
+    practiceChips++;
+  }
+  
+
+  //player getters
+  public boolean getHasMoved(){
+    return hasMoved;
+  }
+  public Room getLocation(){
+    return location;
+  }
+  public int getPracticeChips(){
+    return practiceChips;
+  }
+  public int getRank(){
+    return rank;
+  }
+  public int getScore(){
+    return dollars + credits + (rank*5);
+  }
+  public Role getCurrentRole(){
+    return currentRole;
   }
   public String getName(){
     return name;
-  }
-  //need a class for current player role
-  //need a class for current player rooms
-  
-  public void getPossibleActions(String playerSetLocation){
-    //call controller to display available actions
-    //(actions include movement,upgrading,practicing,acting,taking a role)
   }
   public Set[] getPossibleMoves(){
     return this.location.getNeighbors();
@@ -28,53 +89,72 @@ public class Player
     //check set and scene card of active player for open roles they qualify for
     //allow player to select one of the roles or decline
     
-    return sceneRoles + setRoles;
+    return null;
   }
+  public int getAffordableUpgrades(){
+    //determine availible ranks for upgrade to Player
+    int highestRank = 0;
+    if ((credits <= 25) || (dollars <= 40)){
+      return highestRank + 6;
+    }else if ((credits <= 20) || (dollars <= 28)){
+      return highestRank + 5;
+    }else if ((credits <= 15) || (dollars <= 18)){
+      return highestRank + 4;
+    }else if ((credits <= 10) || (dollars <= 10)){
+      return highestRank + 3;
+    }else if ((credits <= 5) || (dollars <= 4)){
+      return highestRank + 2;
+    }else{
+      return highestRank;
+    }
+  }
+  public int getDollars(){
+    return dollars;
+  }
+  public int getCredits(){
+    return credits;
+  }
+  //player getters
+
+
+
   public void act(int practiceChips, String currentRole){
     //roll die and add practiceChips
     int budget = 0; //access xml file and assign budget of the current scene card
     int dieRoll = 0; //roll die, assign result to dieRoll
+    hasActedOrRehearsed = true;
     int result = dieRoll + practiceChips;
     if (budget <= result) {
         this.location.removeShotCounter();
-      //call function to remove a scene counter from current set
-      if (this.role.isOnCard()){ //if current role is on card
+      if (this.currentRole.isOnCard()){ //if current role is on card
         addCredits(2);
       }else{
         addDollars(2);
+      }
+      if (this.location.getShotcounters() == 0){
+        resetPracticeChips();
+        currentRole = null;
       }
     }else{
         if (!this.role.isOnCard()){
             addDollars(1);
         }
     }
-    //compare result to budget
-    //if successful determine payout for role
-    //remove counter
-    //if last counter is removed, call on bonuses
-    //if unsuccessful display failure message
   }
-  public int getAffordableUpgrades(int playerCredits, int playerDollars){
-    //determine availible ranks for upgrade to Player
-    //return integer of highest rank affordable
-    int highestUpgrade = 0;
-    return highestUpgrade;
-  }
-  public void rehearsal(){
-    //player gets +1 to thier practice chips
-    practiceChips++;
-  }
-  public void addCredits(int amount){
-    credits += amount;
-  }
-  public void addDollars(int amount){
-    dollars += amount;
-  }
-  public void resetPracticeChips(){
-    practice chips = 0;
-  }
-}
-
-  public Player(){}
   
+  
+  public boolean enoughDollars(int amount){
+    if (amount <= dollars){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  public boolean enoughCredits(int amount){
+    if (amount <= credits){
+      return true;
+    }else{
+      return false;
+    }
+  }
 }
