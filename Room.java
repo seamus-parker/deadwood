@@ -20,6 +20,12 @@ public class Room {
         this.name = myName;
     }
 
+    public void removeShotCounter() {}
+
+    public int getShotCounters() {
+        return 0;
+    }
+
     public Room() {}
 
     public Room(String myName, Room[] myNeighbors) {
