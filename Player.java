@@ -82,7 +82,7 @@ public class Player
   public String getName(){
     return name;
   }
-  public Room[] getPossibleMoves(){
+  public String[] getPossibleMoves(){
     return this.location.getNeighbors();
   }
   public String getPossibleRoles(String Location){

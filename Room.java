@@ -2,13 +2,18 @@ public class Room {
 
     private String name;
 
-    private Room[] neighbors;
+    private String[] neighbors;
 
-    Room[] getNeighbors() {
+    protected int x;
+    protected int y;
+    protected int h;
+    protected int w;
+
+    String[] getNeighbors() {
         return this.neighbors;
     }
 
-    public void setNeighbors(Room[] myNeighbors) {
+    public void setNeighbors(String[] myNeighbors) {
         this.neighbors = myNeighbors;
     }
 
@@ -28,9 +33,23 @@ public class Room {
 
     public Room() {}
 
-    public Room(String myName, Room[] myNeighbors) {
+    public Room(String myName, String[] myNeighbors,
+                int myX, int myY, int myH, int myW) {
         this.name = myName;
         this.neighbors = myNeighbors;
+        this.x = myX;
+        this.y = myY;
+        this.h = myH;
+        this.w = myW;
+    }
+
+    public void print() {
+        System.out.println("name: " + this.name);
+        System.out.println("neighbors: ");
+        String[] neighborNames = this.getNeighbors();
+        for (int i = 0; i < neighborNames.length; i++) {
+            System.out.println(neighborNames[i]);
+        }
     }
 
 }
