@@ -293,6 +293,31 @@ public class XMLParser{
             return deck;
         }
 
-
+        public int[][] getUpgradeData(Document d) {
+            Element root = d.getDocumentElement();
+            Node office = root.getElementsByTagName("office").item(0);
+            NodeList children = office.getChildNodes();
+            Node upgradeNode = children.item(5);
+            children = upgradeNode.getChildNodes();
+            int credits = 0;
+            int level = 0;
+            int amt = 0;
+            int[][] upgrades = new int[2][5];
+            for (int i = 0; i < children.getLength(); i++) {
+                Node sub = children.item(i);
+                if ("upgrade".equals(sub.getNodeName())) {
+                    if ("credit".equals(sub.getAttributes().getNamedItem("currency").getNodeValue())) {
+                        credits = 1;
+                    }
+                    else {
+                        credits = 0;
+                    }
+                    level = Integer.valueOf(sub.getAttributes().getNamedItem("level").getNodeValue());
+                    amt = Integer.valueOf(sub.getAttributes().getNamedItem("amt").getNodeValue());
+                    upgrades[credits][level-2] = amt;
+                }
+            }
+            return upgrades;
+        }
 
 }//class
