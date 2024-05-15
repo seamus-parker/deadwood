@@ -20,25 +20,23 @@ public class Set extends Room{
     // calculate and distribute bonuses to players working on the card
     public void calculateBonuses(){}
 
-    public Set(String myName, Room[] myNeighbors, Role[] myRoles, int numShots) {
+    public Set(String myName, String[] myNeighbors, Role[] myRoles,
+               int numShots, int myX, int myY, int myH, int myW) {
         super.setName(myName);
         super.setNeighbors(myNeighbors);
         this.roles = myRoles;
         this.shots = numShots;
         this.replaceShotCounters();
-    }
-    public Set(String myName, String[] myNeighbors, Role[] myRoles, int numShots) {
-        super.setName(myName);
-        super.setNeighborNames(myNeighbors);
-        this.roles = myRoles;
-        this.shots = numShots;
-        this.replaceShotCounters();
+        this.x = myX;
+        this.y = myY;
+        this.h = myH;
+        this.w = myW;
     }
 
     public void print() {
         System.out.println("name: " + super.getName());
         System.out.println("neighbors: ");
-        String[] neighborNames = this.getNeighborNames();
+        String[] neighborNames = this.getNeighbors();
         for (int i = 0; i < neighborNames.length; i++) {
             System.out.println(neighborNames[i]);
         }

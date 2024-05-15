@@ -4,12 +4,21 @@ public class Role {
     String name;
     String line;
     boolean onCard;
+    int x;
+    int y; 
+    int h;
+    int w;
 
-    public Role(int myLevel, String myName, String myLine, boolean isOnCard) {
+    public Role(int myLevel, String myName, String myLine, boolean isOnCard,
+                int myX, int myY, int myH, int myW) {
         this.level = myLevel;
         this.name = myName;
         this.line = myLine;
         this.onCard = isOnCard;
+        this.x = myX;
+        this.y = myY;
+        this.h = myH;
+        this.w = myW;
     }
     
     public int getLevel() {
