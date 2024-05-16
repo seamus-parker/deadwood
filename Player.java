@@ -1,7 +1,23 @@
 public class Player
 {
-  public Player(){}
+  private String name;
+  private int dollars = 0;
+  private int credits = 0;
+  private int rank = 1;
+  private Role currentRole;
+  private Room location;
+  private int practiceChips = 0;
+  private boolean hasMoved = false;
+  private boolean hasActedOrRehearsed = false;
   //player attributes
+
+  //player constuctor
+  public Player(String name, int idNumber){
+    this.name = name;
+    this.idNumber = idNumber;
+    this.rank = 1;
+    this.Room = "trailers";
+  }
   private String name;
   private int dollars = 0;
   private int credits = 0;
