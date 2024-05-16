@@ -1,5 +1,18 @@
+import java.util.Scanner;
+
 public class View 
 {
+
+    Scanner sc;
+
+    public String[] getPlayerNames(int numPlayers) {
+        String[] names = new String[numPlayers];
+        for (int i = 0; i < numPlayers; i++) {
+            System.out.format("Player %d, enter your name: ", i + 1);
+            names[i] = sc.nextLine();
+        }
+        return names;
+    }
 
     // Print the name and info of the current active player
     public void activePlayer(String name, int money, int credits, int rank, String location) {
@@ -88,4 +101,7 @@ public class View
         System.out.println("Game over! " + winner + " wins!");
     }
     
+    public View() {
+        this.sc = new Scanner(System.in);
+    }
 }

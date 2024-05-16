@@ -1,27 +1,17 @@
 import org.w3c.dom.Document;
 import javax.xml.parsers.ParserConfigurationException;
+import java.util.*;
 
 public class Deadwood {
     public static void main(String[] args) throws ParserConfigurationException{
         XMLParser parser = new XMLParser();
-        Document d = parser.getDocFromFile("board.xml");
-        Room[] board = parser.readRoomData(d);
-        // for (int i = 0; i < board.length; i++) {
-        //     board[i].print();
-        // }
-        Document f = parser.getDocFromFile("cards.xml");
-        Scene[] deck = parser.readSceneData(f);
-        // for (int i = 0; i < deck.length; i++) {
-        //     deck[i].print();
-        // }
+        View v = new View();
+        int numPlayers = Integer.valueOf(args[0]);
+        Board b = new Board(v.getPlayerNames(numPlayers), numPlayers, 
+        parser.readRoomData("board.xml"), parser.readSceneData("cards.xml"), parser.getUpgradeData("board.xml"));
 
-        int[][] upgrades = parser.getUpgradeData(d);
-        // for (int i = 0; i < upgrades.length; i++) {
-        //     for (int j = 0; j < upgrades[0].length; j++) {
-        //         System.out.format("%d ", upgrades[i][j]);
-        //     }
-        //     System.out.println();
-        // }
+        // GameManager gm = new GameManager();
+        
 
     }
     

@@ -38,66 +38,12 @@ public class XMLParser{
         
         }  
         
-        // reads data from XML file and prints data
-        public void readBookData(Document d){
-        
-            Element root = d.getDocumentElement();
-            
-            NodeList books = root.getElementsByTagName("book");
-            
-            for (int i=0; i<books.getLength();i++){
-                
-                System.out.println("Printing information for book "+(i+1));
-                
-                //reads data from the nodes
-                Node book = books.item(i);
-                String bookCategory = book.getAttributes().getNamedItem("category").getNodeValue();
-                System.out.println("Category = "+bookCategory);
-                
-                //reads data
-                                             
-                NodeList children = book.getChildNodes();
-                
-                for (int j=0; j< children.getLength(); j++){
-                    
-                  Node sub = children.item(j);
-                
-                  if("title".equals(sub.getNodeName())){
-                     String bookLanguage = sub.getAttributes().getNamedItem("lang").getNodeValue();
-                     System.out.println("Language = "+bookLanguage);
-                     String title = sub.getTextContent();
-                     System.out.println("Title = "+title);
-                     
-                  }
-                  
-                  else if("author".equals(sub.getNodeName())){
-                     String authorName = sub.getTextContent();
-                     System.out.println(" Author = "+authorName);
-                     
-                  }
-                  else if("year".equals(sub.getNodeName())){
-                     String yearVal = sub.getTextContent();
-                     System.out.println(" Publication Year = "+yearVal);
-                     
-                  }
-                  else if("price".equals(sub.getNodeName())){
-                     String priceVal = sub.getTextContent();
-                     System.out.println(" Price = "+priceVal);
-                     
-                  }
-                                 
-                
-                } //for childnodes
-                
-                System.out.println("\n");
-                
-            }//for book nodes
-        
-        }// method
+    
     
                 // reads data from XML file and prints data
-        public Room[] readRoomData(Document d){
+        public Room[] readRoomData(String filename) throws ParserConfigurationException{
         
+            Document d = getDocFromFile(filename);
             Element root = d.getDocumentElement();
             
             NodeList sets = root.getElementsByTagName("set");
@@ -257,8 +203,9 @@ public class XMLParser{
             return roomParts;
         }
         
-        public Scene[] readSceneData(Document d) {
-            
+        public Scene[] readSceneData(String filename) throws ParserConfigurationException{
+        
+            Document d = getDocFromFile(filename);
             Element root = d.getDocumentElement();
 
             NodeList cards = root.getElementsByTagName("card");
@@ -293,7 +240,9 @@ public class XMLParser{
             return deck;
         }
 
-        public int[][] getUpgradeData(Document d) {
+        public int[][] getUpgradeData(String filename) throws ParserConfigurationException{
+        
+            Document d = getDocFromFile(filename);
             Element root = d.getDocumentElement();
             Node office = root.getElementsByTagName("office").item(0);
             NodeList children = office.getChildNodes();
