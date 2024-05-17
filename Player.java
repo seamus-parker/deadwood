@@ -9,6 +9,7 @@ public class Player
   private int practiceChips = 0;
   private boolean hasMoved = false;
   private boolean hasActedOrRehearsed = false;
+  private boolean isWorking = false;
   private int idNumber = 0;
   //player attributes
 
@@ -17,7 +18,7 @@ public class Player
     this.name = name;
     this.idNumber = idNumber;
     this.rank = 1;
-    this.Room = startingRoom;
+    this.location = startingRoom;
   }
 
   //player setters
@@ -58,7 +59,10 @@ public class Player
     rank = newRank;
   }
   public void acceptRole(Role newRole){
-    currentRole = newRole; 
+    currentRole = newRole;
+    if (newRole.isOnCard()) {
+      this.location.getCard().addPlayer(this);
+    }
   }
   public void rehearsal(){
     //player gets +1 to thier practice chips
@@ -88,6 +92,9 @@ public class Player
   }
   public String getName(){
     return name;
+  }
+  public int getId() {
+    return this.idNumber;
   }
   public String[] getPossibleMoves(){
     return this.location.getNeighbors();
