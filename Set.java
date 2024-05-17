@@ -1,3 +1,4 @@
+import java.util.Arrays;
 public class Set extends Room{
     
     public Role[] roles;
