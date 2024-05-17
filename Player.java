@@ -148,6 +148,7 @@ public class Player
       if (this.location.getShotCounters() == 0){
         resetPracticeChips();
         currentRole = null;
+        //call on bonuses
       }
     }else{
         if (!this.currentRole.isOnCard()){
