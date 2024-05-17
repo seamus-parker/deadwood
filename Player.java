@@ -135,7 +135,7 @@ public class Player
   public void act(int practiceChips, String currentRole){
     //roll die and add practiceChips
     int budget = 0; //access xml file and assign budget of the current scene card
-    int dieRoll = 0; //roll die, assign result to dieRoll
+    int dieRoll = (int) (Math.random() * SIDES) + 1;
     hasActedOrRehearsed = true;
     int result = dieRoll + practiceChips;
     if (budget <= result) {
