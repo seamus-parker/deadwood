@@ -9,25 +9,16 @@ public class Player
   private int practiceChips = 0;
   private boolean hasMoved = false;
   private boolean hasActedOrRehearsed = false;
+  private int idNumber = 0;
   //player attributes
 
   //player constuctor
-  public Player(String name, int idNumber){
+  public Player(String name, int idNumber, Room startingRoom){
     this.name = name;
     this.idNumber = idNumber;
     this.rank = 1;
-    this.Room = "trailers";
+    this.Room = startingRoom;
   }
-  private String name;
-  private int dollars = 0;
-  private int credits = 0;
-  private int rank = 1;
-  private Role currentRole;
-  private Room location;
-  private int practiceChips = 0;
-  private boolean hasMoved = false;
-  private boolean hasActedOrRehearsed = false;
-  //player attributes
 
   //player setters
   public void playerActedOrReheased(){
