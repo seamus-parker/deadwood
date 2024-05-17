@@ -26,7 +26,7 @@ public class Set extends Room{
         int[] bonusResults = new int[6];
         for (int i = 0; i < 6; i++){
             if (i<budget){
-                int result = dieRoll();
+                int result = (int) (Math.random() * 6) + 1;
                 bonusResults[i] = result;
             }else{
                 bonusResults[i]=0;
