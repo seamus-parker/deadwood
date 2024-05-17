@@ -8,6 +8,9 @@ public class Set extends Room{
 
     public int shotCounters;
 
+    public boolean wrapped = false;
+
+
 
     public void removeShotCounter() {
         this.shotCounters--;
