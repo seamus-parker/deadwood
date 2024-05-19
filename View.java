@@ -44,7 +44,35 @@ public class View
 
     public String actionInput() {
         System.out.format("What action would you like to take?\n");
-        return sc.nextLine();
+        return parseAction(sc.nextLine());
+    }
+
+    public String parseAction(String a) {
+        if (a.contains("move")) {
+            return "move";
+        }
+        else if (a.contains("work")) {
+            return "work";
+        }
+        else if (a.contains("act")) {
+            return "act";
+        }
+        else if (a.contains("rehearse")) {
+            return "rehearse";
+        }
+        else if (a.contains("upgrade")) {
+            return "upgrade";
+        }
+        else if (a.contains("end turn")) {
+            return "end";
+        }
+        else if (a.contains("end game")) {
+            return "endgame";
+        }
+        else if (a.contains("locations")) {
+            return "locations";
+        }
+        else return "invalid";
     }
 
     // Display possible move locations for a player
@@ -54,6 +82,26 @@ public class View
             System.out.print(locations[i] + ", ");
         }
         System.out.println(locations[locations.length - 1]);
+    }
+
+    public String getMoveSelection(String[] locs) {
+        possibleMoves(locs);
+        System.out.println("Where would you like to move?");
+        String move = sc.nextLine();
+        while (!validateMove(locs, move)) {
+            System.out.println("Invalid move selection. Please try again.");
+            move = sc.nextLine();
+        }
+        return move;
+    }
+
+    public boolean validateMove(String[] locs, String input) {
+        for (int i = 0; i < locs.length; i++) {
+            if (input.contains(locs[i])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Display confirmation that a player has moved
