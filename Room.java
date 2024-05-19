@@ -57,6 +57,10 @@ public class Room {
         this.w = myW;
     }
 
+    public Role[] getRoles() {
+        return new Role[0];
+    }
+
     public void print() {
         System.out.println("name: " + this.name);
         System.out.println("neighbors: ");

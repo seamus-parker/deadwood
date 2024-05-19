@@ -77,9 +77,6 @@ public class Player
   public void resetRole(){
     currentRole = null;
   }
-  public void resetRole(){
-    currentRole = null;
-  }
   public void rehearsal(){
     //player gets +1 to thier practice chips
     hasActedOrRehearsed = true;
@@ -165,10 +162,21 @@ public class Player
     return this.location.getNeighbors();
   }
   public ArrayList<Role> getPossibleRoles(){
-    //check set and scene card of active player for open roles they qualify for
-    //allow player to select one of the roles or decline
-    
-    return null;
+ 
+    Role[] onCardRoles = this.location.getCard().getRoles();
+    Role[] offCardRoles = this.location.getRoles();
+    ArrayList<Role> avaliableRoles = new ArrayList<Role>();
+    for (int i = 0; i < onCardRoles.length;i++){
+      if (onCardRoles[i].getLevel() <= this.rank){
+        avaliableRoles.add(onCardRoles[i]);
+      }
+    }
+    for (int i = 0; i < offCardRoles.length;i++){
+      if (offCardRoles[i].getLevel() <= this.rank){
+        avaliableRoles.add(offCardRoles[i]);
+      }
+    }
+    return avaliableRoles;
   }
   public int getAffordableUpgrades(){
     //determine availible ranks for upgrade to Player
@@ -199,20 +207,19 @@ public class Player
 
   public void act(int practiceChips, String currentRole){
     //roll die and add practiceChips
-    int budget = 0; //access xml file and assign budget of the current scene card
+    int budget = this.location.getCard().getBudget(); //access xml file and assign budget of the current scene card
     int dieRoll = (int) (Math.random() * 6) + 1;
     playerActedOrReheased();
     int result = dieRoll + practiceChips;
     if (budget <= result) {
       this.location.removeShotCounter();
-      if (this.currentRole.isOnCard()){ //if current role is on card
+      if (this.currentRole.isOnCard()){
         addCredits(2);
       }else{
         addDollars(2);
       }
       if (this.location.getShotCounters() == 0){
-        //need a get function to retrieve budget from the card.
-        Set.calculateBonuses(this.location.getBudget());
+        this.location.calculateBonuses(this.location.getBudget());
       }
     }else{
         if (!this.currentRole.isOnCard()){

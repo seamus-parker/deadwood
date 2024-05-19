@@ -14,6 +14,10 @@ public class Set extends Room{
   
     public ArrayList<Player> extras;
 
+    public Scene getCard(){
+        return this.card;
+    }
+
 
     public void setWrapUp(){
 	    //get all players on set(on and off card) into list/Array
@@ -24,21 +28,14 @@ public class Set extends Room{
 	    for (int i = 0; i < playerList.length; i++){
 	        playerList[i].resetPracticeChips();
 	        playerList[i].resetRole();
-            wrapped = true;
 	    }
-	}
-
-    public void setWrapUp(){
-	    //get all players on set(on and off card) into list/Array
-        Player[] playerList = card.getSortedPlayers();
-        //need function to get all players with off card roles, 
-        //playerList should be a combination of getsortedPlayers
-        //and an array of the off card players
-	    for (int i = 0; i < playerList.length; i++){
+        wrapped = true;
+        Player[] extras = this.getExtras();
+        for (int i = 0; i < extras.length; i++){
 	        playerList[i].resetPracticeChips();
 	        playerList[i].resetRole();
-            wrapped = true;
 	    }
+
         this.extras = new ArrayList<Player>();
 	}
 
@@ -84,6 +81,13 @@ public class Set extends Room{
         //provide bonuses for them, array declaration below
 
         Player[] playersOffCard = this.getExtras();
+        if (playersOnCard > 0){
+            for (int i = 0; i < playersOffCard.length; i++){
+                int bonusAmount = playersOffCard[i].getCurrentRole().getLevel();
+                playersOffCard[i].addDollars(bonusAmount);
+            }
+
+        }
 
         if (playersOnCard == 3){
             playerArray[2].addDollars(bonusResults[5]);
@@ -92,10 +96,7 @@ public class Set extends Room{
             playerArray[1].addDollars(bonusResults[1]);
             playerArray[0].addDollars(bonusResults[3]);
             playerArray[0].addDollars(bonusResults[0]);
-            for (int i = 0; i < playersOffCard.length; i++){
-                int bonusAmount = playersOffCard[i].getCurrentRole().getLevel();
-                playersOffCard[i].addDollars(bonusAmount);
-            }
+            
         }else if (playersOnCard == 2){
             playerArray[1].addDollars(bonusResults[5]);
             playerArray[1].addDollars(bonusResults[2]);
@@ -133,6 +134,9 @@ public class Set extends Room{
         this.y = myY;
         this.h = myH;
         this.w = myW;
+    }
+    public Role[] getRoles(){
+        return this.roles;
     }
 
     public void print() {
