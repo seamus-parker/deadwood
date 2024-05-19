@@ -25,4 +25,32 @@ public class GameManager {
             //reduce the number of days by one
         }
     }
+
+    public boolean validateActionInput(Player p, String action) {
+        if (action == "move") {
+            return p.canMove();
+        }
+        else if (action == "work") {
+            return p.canWork();
+        }
+        else if (action == "act") {
+            return p.canAct();
+        }
+        else if (action == "rehearse") {
+            return p.canRehearse();
+        }
+        else if (action == "upgrade") {
+            return p.canUpgrade();
+        }
+        else if (action == "invalid") {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    public void execute(Player p, String action) {
+        
+    }
 }

@@ -120,7 +120,7 @@ public class Player
         actions.add("take role");
       }
     }
-    else {
+    else if (!hasActedOrRehearsed) {
       actions.add("act");
       if (this.practiceChips < this.currentRole.getLevel()) {
         actions.add("rehearse");
@@ -129,33 +129,50 @@ public class Player
     return actions;
   }
 
-  public boolean validateActionInput(String action) {
-    if (action == "move") {
-      if (this.isWorking) {
-        return false;
-      }
-      else {
-        return true;
-      }
+  public boolean canMove() {
+    if (this.isWorking || this.hasMoved) {
+      return false;
     }
-    else if (action == "work") {
-      if (this.isWorking || this.getPossibleRoles().size() == 0) {
-        return false;
-      }
-      else {
-        return true;
-      }
+    else {
+      return true;
     }
-    else if (action == "act") {
-      if (this.isWorking) {
-        return true;
-      }
-      else {
-        return false;
-      }
+  }
+
+  public boolean canWork() {
+    if (this.isWorking || this.getPossibleRoles().size() == 0) {
+      return false;
     }
-    // else if (action == "upgrade")
-    return false;
+    else {
+      return true;
+    }
+  }
+
+  public boolean canAct() {
+    if (this.isWorking && !this.hasActedOrRehearsed) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public boolean canRehearse() {
+    if (this.isWorking && !this.hasActedOrRehearsed
+    && this.practiceChips < this.currentRole.getLevel()) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  public boolean canUpgrade() {
+    if (this.location.getName() == "office") {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   public String[] getPossibleMoves(){
@@ -242,5 +259,10 @@ public class Player
     }else{
       return false;
     }
+  }
+
+  public void move (Room location) {
+    this.setLocation(location);
+    this.hasMoved = true;
   }
 }
