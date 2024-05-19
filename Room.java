@@ -43,6 +43,8 @@ public class Room {
         return 0;
     }
 
+    public void calculateBonuses() {}
+
     public Room() {}
 
     public Room(String myName, String[] myNeighbors,

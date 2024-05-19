@@ -11,15 +11,11 @@ public class Scene
   int sceneNum;
   ArrayList<Player> playersOnCard = new ArrayList<Player>();
 
-  public void getRoles(String playerSetLocation){
-    //use players location to find the scene card on thier set
-    //use xml file to find the roles listed on the appopriate scene card
+  public Role[] getRoles() {
+    return this.roles;
   }
-  public int getBudget(String playerSetLocation){
-    //use players location to find the scene card on thier set
-    //use xml file to return the budget
-    int sceneBudget = 0;
-    return sceneBudget;
+  public int getBudget() {
+    return this.budget;
   }
 
   public Player[] getSortedPlayers() {
