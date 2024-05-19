@@ -4,14 +4,14 @@ public class GameManager {
     //end of day
     //game setup
     public void endTurn(){
-        this.Player.resetActedOrReaheased;
-        this.player.resetMove;
+        this.player.resetActedOrReaheased();
+        this.Player.resetMove();
     }
     public void endDay(){
         //remove players still on a role
-        this.player.acceptRole(null);
+        this.Player.acceptRole(null);
         //move players to tailers
-        this.player.setLocation("trailers");
+        this.Player.setLocation("trailers");
     }
     public void GameSetup(int numberOfPlayers){
         this.player.setLocation('trailers');

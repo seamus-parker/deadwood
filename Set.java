@@ -11,8 +11,22 @@ public class Set extends Room{
     public int shotCounters;
 
     public boolean wrapped = false;
-
+  
     public ArrayList<Player> extras;
+
+
+    public void setWrapUp(){
+	    //get all players on set(on and off card) into list/Array
+        Player[] playerList = card.getSortedPlayers();
+        //need function to get all players with off card roles, 
+        //playerList should be a combination of getsortedPlayers
+        //and an array of the off card players
+	    for (int i = 0; i < playerList.length; i++){
+	        playerList[i].resetPracticeChips();
+	        playerList[i].resetRole();
+            wrapped = true;
+	    }
+	}
 
     public void setWrapUp(){
 	    //get all players on set(on and off card) into list/Array
@@ -68,6 +82,7 @@ public class Set extends Room{
         Arrays.sort(bonusResults);
         //need an array of players with off card rolls to 
         //provide bonuses for them, array declaration below
+
         Player[] playersOffCard = this.getExtras();
 
         if (playersOnCard == 3){

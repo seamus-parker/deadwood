@@ -77,6 +77,9 @@ public class Player
   public void resetRole(){
     currentRole = null;
   }
+  public void resetRole(){
+    currentRole = null;
+  }
   public void rehearsal(){
     //player gets +1 to thier practice chips
     hasActedOrRehearsed = true;
