@@ -43,7 +43,7 @@ public class Room {
         return 0;
     }
 
-    public void calculateBonuses() {}
+    public void calculateBonuses(int a) {}
 
     public Room() {}
 
