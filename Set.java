@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 public class Set extends Room{
     
@@ -11,6 +12,8 @@ public class Set extends Room{
 
     public boolean wrapped = false;
 
+    public ArrayList<Player> extras;
+
     public void setWrapUp(){
 	    //get all players on set(on and off card) into list/Array
         Player[] playerList = card.getSortedPlayers();
@@ -22,9 +25,20 @@ public class Set extends Room{
 	        playerList[i].resetRole();
             wrapped = true;
 	    }
+        this.extras = new ArrayList<Player>();
 	}
 
+    public void addExtra(Player p) {
+        this.extras.add(p);
+    }
 
+    public Player[] getExtras() {
+        Player[] arr = new Player[this.extras.size()];
+        for (int i = 0; i < this.extras.size(); i++) {
+            arr[i] = this.extras.get(i);
+        }
+        return arr;
+    }
 
     public void removeShotCounter() {
         this.shotCounters--;
@@ -32,6 +46,10 @@ public class Set extends Room{
 
     public void replaceShotCounters() {
         this.shotCounters = this.shots;
+    }
+
+    public boolean isWrapped() {
+        return this.wrapped;
     }
 
     // calculate and distribute bonuses to players working on the card
@@ -50,7 +68,7 @@ public class Set extends Room{
         Arrays.sort(bonusResults);
         //need an array of players with off card rolls to 
         //provide bonuses for them, array declaration below
-        Player[] playersOffCard;
+        Player[] playersOffCard = this.getExtras();
 
         if (playersOnCard == 3){
             playerArray[2].addDollars(bonusResults[5]);

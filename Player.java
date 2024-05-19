@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Player
 {
   private String name;
@@ -70,6 +72,7 @@ public class Player
     if (newRole.isOnCard()) {
       this.location.getCard().addPlayer(this);
     }
+    this.location.addExtra(this);
   }
   public void resetRole(){
     currentRole = null;
@@ -106,10 +109,59 @@ public class Player
   public int getId() {
     return this.idNumber;
   }
+
+  public ArrayList<String> getPossibleActions() {
+    ArrayList<String> actions = new ArrayList<String>();
+    if (!this.isWorking) {
+      if (!this.hasMoved) {
+        actions.add("move");
+      }
+      if (this.getPossibleRoles().size() > 0) {
+        actions.add("take role");
+      }
+    }
+    else {
+      actions.add("act");
+      if (this.practiceChips < this.currentRole.getLevel()) {
+        actions.add("rehearse");
+      }
+    }
+    return actions;
+  }
+
+  public boolean validateActionInput(String action) {
+    if (action == "move") {
+      if (this.isWorking) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
+    else if (action == "work") {
+      if (this.isWorking || this.getPossibleRoles().size() == 0) {
+        return false;
+      }
+      else {
+        return true;
+      }
+    }
+    else if (action == "act") {
+      if (this.isWorking) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+    // else if (action == "upgrade")
+    return false;
+  }
+
   public String[] getPossibleMoves(){
     return this.location.getNeighbors();
   }
-  public String getPossibleRoles(String Location){
+  public ArrayList<Role> getPossibleRoles(){
     //check set and scene card of active player for open roles they qualify for
     //allow player to select one of the roles or decline
     

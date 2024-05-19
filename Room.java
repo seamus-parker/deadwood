@@ -31,6 +31,18 @@ public class Room {
         return 0;
     }
 
+    public boolean isWrapped() { return true; }
+
+    public Scene getCard() {
+        return new Scene();
+    }
+
+    public void addExtra(Player p) {}
+
+    public int getBudget() {
+        return 0;
+    }
+
     public Room() {}
 
     public Room(String myName, String[] myNeighbors,

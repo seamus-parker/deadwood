@@ -48,6 +48,8 @@ public class Scene
     playersOnCard.add(p);
   }
 
+  public Scene() {}
+
   public Scene(String myName, int myBudget, String myDescription, 
                Role[] myRoles, String myImg, int myNum) {
     this.name = myName;

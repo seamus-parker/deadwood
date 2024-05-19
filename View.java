@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class View 
@@ -31,12 +32,19 @@ public class View
     }
 
     // Display all possible actions a player could take
-    public void possibleActions(String[] actions) {
+    public void possibleActions(ArrayList<String> actions) {
+
         System.out.print("Possible actions: ");
-        for (int i = 0; i < actions.length - 1; i++) {
-            System.out.print(actions[i] + ", ");
+        for (int i = 0; i < actions.size() - 1; i++) {
+            System.out.print(actions.get(i) + ", ");
         }
-        System.out.println(actions[actions.length - 1]);
+        System.out.println(actions.get(actions.size() - 1));
+        
+    }
+
+    public String actionInput() {
+        System.out.format("What action would you like to take?\n");
+        return sc.nextLine();
     }
 
     // Display possible move locations for a player

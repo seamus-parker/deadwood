@@ -33,6 +33,16 @@ public class Board {
         return new Room();
     }
 
+    public int activeScenes() {
+        int n = 0;
+        for (int i = 0; i < this.sets.length; i++) {
+            if (!this.sets[i].isWrapped()) {
+                n++;
+            }
+        }
+        return n;
+    }
+
     public Player getActivePlayer() {
         return this.activePlayer;
     }
@@ -55,6 +65,10 @@ public class Board {
 
     // Move players back to trailers, deal new scenes & replace shot counters
     public void endDay(){}
+
+    public int getDays() {
+        return this.days;
+    }
 
     // Determine the winner of the game and return their name
     public String calculateWinner(String[] names, int[] ranks){ return ""; }
