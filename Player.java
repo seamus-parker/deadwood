@@ -16,9 +16,16 @@ public class Player
   //player constuctor
   public Player(String name, int idNumber, Room startingRoom){
     this.name = name;
-    this.idNumber = idNumber;
+    this.dollars = 0;
+    this.credits = 0;
     this.rank = 1;
+    this.currentRole = null;
     this.location = startingRoom;
+    this.idNumber = idNumber;
+    this.practiceChips = 0;
+    this.hasMoved = false;
+    this.hasActedOrRehearsed = false;
+    this.isWorking = false;
   }
 
   //player setters
@@ -63,6 +70,9 @@ public class Player
     if (newRole.isOnCard()) {
       this.location.getCard().addPlayer(this);
     }
+  }
+  public void resetRole(){
+    currentRole = null;
   }
   public void rehearsal(){
     //player gets +1 to thier practice chips
@@ -135,20 +145,19 @@ public class Player
   public void act(int practiceChips, String currentRole){
     //roll die and add practiceChips
     int budget = 0; //access xml file and assign budget of the current scene card
-    int dieRoll = 0; //roll die, assign result to dieRoll
-    hasActedOrRehearsed = true;
+    int dieRoll = (int) (Math.random() * 6) + 1;
+    playerActedOrReheased();
     int result = dieRoll + practiceChips;
     if (budget <= result) {
-        this.location.removeShotCounter();
+      this.location.removeShotCounter();
       if (this.currentRole.isOnCard()){ //if current role is on card
         addCredits(2);
       }else{
         addDollars(2);
       }
       if (this.location.getShotCounters() == 0){
-        resetPracticeChips();
-        currentRole = null;
-        //call on bonuses
+        //need a get function to retrieve budget from the card.
+        Set.calculateBonuses(this.location.getBudget());
       }
     }else{
         if (!this.currentRole.isOnCard()){

@@ -11,6 +11,19 @@ public class Set extends Room{
 
     public boolean wrapped = false;
 
+    public void setWrapUp(){
+	    //get all players on set(on and off card) into list/Array
+        Player[] playerList = card.getSortedPlayers();
+        //need function to get all players with off card roles, 
+        //playerList should be a combination of getsortedPlayers
+        //and an array of the off card players
+	    for (int i = 0; i < playerList.length; i++){
+	        playerList[i].resetPracticeChips();
+	        playerList[i].resetRole();
+            wrapped = true;
+	    }
+	}
+
 
 
     public void removeShotCounter() {
@@ -26,7 +39,7 @@ public class Set extends Room{
         int[] bonusResults = new int[6];
         for (int i = 0; i < 6; i++){
             if (i<budget){
-                int result = dieRoll();
+                int result = (int) (Math.random() * 6) + 1;
                 bonusResults[i] = result;
             }else{
                 bonusResults[i]=0;
@@ -35,28 +48,45 @@ public class Set extends Room{
         Player[] playerArray = card.getSortedPlayers();
         int playersOnCard = playerArray.length;
         Arrays.sort(bonusResults);
-        if (playersOnCard = 3){
+        //need an array of players with off card rolls to 
+        //provide bonuses for them, array declaration below
+        Player[] playersOffCard;
+
+        if (playersOnCard == 3){
             playerArray[2].addDollars(bonusResults[5]);
             playerArray[2].addDollars(bonusResults[2]);
             playerArray[1].addDollars(bonusResults[4]);
             playerArray[1].addDollars(bonusResults[1]);
             playerArray[0].addDollars(bonusResults[3]);
             playerArray[0].addDollars(bonusResults[0]);
-        }else if (playersOnCard = 2){
+            for (int i = 0; i < playersOffCard.length; i++){
+                int bonusAmount = playersOffCard[i].getCurrentRole().getLevel();
+                playersOffCard[i].addDollars(bonusAmount);
+            }
+        }else if (playersOnCard == 2){
             playerArray[1].addDollars(bonusResults[5]);
             playerArray[1].addDollars(bonusResults[2]);
             playerArray[1].addDollars(bonusResults[4]);
             playerArray[0].addDollars(bonusResults[1]);
             playerArray[0].addDollars(bonusResults[3]);
             playerArray[0].addDollars(bonusResults[5]);
-        }else if (playersOnCard = 1){
+            for (int i = 0; i < playersOffCard.length; i++){
+                int bonusAmount = playersOffCard[i].getCurrentRole().getLevel();
+                playersOffCard[i].addDollars(bonusAmount);
+            }
+        }else if (playersOnCard == 1){
             playerArray[0].addDollars(bonusResults[0]);
             playerArray[0].addDollars(bonusResults[1]);
             playerArray[0].addDollars(bonusResults[2]);
             playerArray[0].addDollars(bonusResults[3]);
             playerArray[0].addDollars(bonusResults[4]);
             playerArray[0].addDollars(bonusResults[5]);
+            for (int i = 0; i < playersOffCard.length; i++){
+                int bonusAmount = playersOffCard[i].getCurrentRole().getLevel();
+                playersOffCard[i].addDollars(bonusAmount);
+            }
         }
+        setWrapUp();
     }
 
     public Set(String myName, String[] myNeighbors, Role[] myRoles,
