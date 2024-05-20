@@ -11,6 +11,8 @@ Player action commands (case sensetive)
 3. "act"
 4. "rehearse"
 5. "upgrade"
+
+   
 List of additional commands (case sensative)
 1. "upgrade menu", displays ranks and thier prices
 2. "end turn", ends the current players turn (Players turn ends automatically when they have no more actions as well)
