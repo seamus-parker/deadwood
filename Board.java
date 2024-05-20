@@ -127,7 +127,6 @@ public class Board {
         ArrayList<Player> p = new ArrayList<Player>();
         int score = 0;
         int maxScore = 0;
-        int index = 0;
         for (int i = 0; i < players.length; i++) {
             score = players[i].getScore();
             if (score > maxScore) {
