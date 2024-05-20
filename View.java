@@ -117,14 +117,46 @@ public class View
         }
         System.out.println(roles[roles.length - 1]);
     }
+
+    public Role getRoleSelection(ArrayList<Role> roles) {
+        String[] roleNames = new String[roles.size()];
+        for (int i = 0; i < roles.size(); i++) {
+            roleNames[i] = roles.get(i).getName();
+        }
+        possibleRoles(roleNames);
+        System.out.println("Which role will you take?");
+        String role = sc.nextLine();
+        while (validateRole(roleNames, role) == -1) {
+            System.out.println("Invalid role selection. Please try again.");
+            role = sc.nextLine();
+        }
+        return roles.get(validateRole(roleNames, role));
+    }
     
+    public int validateRole(String[] names, String input) {
+        for (int i = 0; i < names.length; i++) {
+            if (input.contains(names[i])) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     // Display confirmation that a player has taken a certain role
     public void playerTookRole(String player, String role, String set) {
         System.out.println(player + " is now playing " + role + " at " + set);
     }
 
     // Display possible upgrades available to the player
-    public void possibleUpgrades(int[] rank, int[] dollarCost, int[] creditCost) {}
+    public void upgradeTable(int[][] upgrades) {
+        System.out.println("Upgrade costs: ");
+        System.out.println("Rank   |   Dollars   |   Credits");
+        for (int i = 0; i < upgrades[0].length; i++) {
+            System.out.println(Integer.toString(i) + "          " + 
+            Integer.toString(upgrades[0][i]) + "          " + 
+            Integer.toString(upgrades[1][i]));
+        }
+    }
 
     // Display confirmation that a player has upgraded their rank
     public void playerUpgraded(String player, int rank) {
@@ -159,5 +191,53 @@ public class View
     
     public View() {
         this.sc = new Scanner(System.in);
+    }
+
+    public int getUpgradeLevel() {
+        System.out.println("Select desired upgrade level:");
+        return parseLevel(sc.nextLine());
+    }
+
+    private int parseLevel(String level) {
+        if (level.equals("2")) {
+            return 2;
+        }
+        else if (level.equals("3")) {
+            return 3;
+        }
+        else if (level.equals("4")) {
+            return 4;
+        }
+        else if (level.equals("5")) {
+            return 5;
+        }
+        else if (level.equals("6")) {
+            return 6;
+        }
+        else return 7;
+    }
+
+    public int getCurrency() {
+        System.out.println("Paying with dollars or credits?");
+        String currency = sc.nextLine();
+        while (!validateCurrency(currency)) {
+            System.out.format("Invalid selection. Please input 'dollars' or 'credits'");
+            currency = sc.nextLine();
+        }
+        if (currency.contains("dollar")) {
+            return 0;
+        }
+        else {
+            return 1;
+        }
+    }
+
+    private boolean validateCurrency(String cur) {
+        if (cur.contains("dollar") || cur.contains("credit")) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

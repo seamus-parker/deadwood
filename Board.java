@@ -70,6 +70,10 @@ public class Board {
         return this.days;
     }
 
+    public int[][] getUpgrades() {
+        return this.upgrades;
+    }
+
     // Determine the winner of the game and return their name
     public String calculateWinner(String[] names, int[] ranks){ return ""; }
 

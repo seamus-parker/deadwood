@@ -72,7 +72,9 @@ public class Player
     if (newRole.isOnCard()) {
       this.location.getCard().addPlayer(this);
     }
-    this.location.addExtra(this);
+    else {
+      this.location.addExtra(this);
+    }
   }
   public void resetRole(){
     currentRole = null;
@@ -222,12 +224,12 @@ public class Player
 
 
 
-  public void act(int practiceChips, String currentRole){
-    //roll die and add practiceChips
+  public boolean act() {
+    
     int budget = this.location.getCard().getBudget(); //access xml file and assign budget of the current scene card
     int dieRoll = (int) (Math.random() * 6) + 1;
     playerActedOrReheased();
-    int result = dieRoll + practiceChips;
+    int result = dieRoll + this.practiceChips;
     if (budget <= result) {
       this.location.removeShotCounter();
       if (this.currentRole.isOnCard()){
@@ -238,10 +240,12 @@ public class Player
       if (this.location.getShotCounters() == 0){
         this.location.calculateBonuses(this.location.getBudget());
       }
+      return true;
     }else{
         if (!this.currentRole.isOnCard()){
             addDollars(1);
         }
+        return false;
     }
   }
   
