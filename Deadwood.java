@@ -27,8 +27,48 @@ public class Deadwood {
                         else {
                             // execute action
                             if (action == "move") {
-                                String move = v.getMoveSelection(p.getPossibleMoves());
-                                p.move(b.getRoomByName(move));
+                                String start = p.getLocation().getName();
+                                String end = v.getMoveSelection(p.getPossibleMoves());
+                                p.move(b.getRoomByName(end));
+                                v.playerMoved(p.getName(), start, end);
+                            }
+                            else if (action == "work") {
+                                Role role = v.getRoleSelection(p.getPossibleRoles());
+                                p.acceptRole(role);
+                                v.playerTookRole(p.getName(), 
+                                                 p.getCurrentRole().getName(), 
+                                                 p.getLocation().getName());
+                            }
+                            else if (action == "act") {
+                                boolean success = p.act();
+                                v.playerActed(success);
+                            }
+                            else if (action == "rehearse") {
+                                p.rehearsal();
+                                v.playerRehearsed(p.getName(), p.getPracticeChips());
+                            }
+                            else if (action == "upgrade") {
+                                v.upgradeTable(b.getUpgrades());
+                                int rank = v.getUpgradeLevel();
+                                int currency = v.getCurrency();
+                                while (!p.canAffordUpgrade(rank, b.getUpgrades(), currency)) {
+                                    System.out.println("Can\'t afford selected upgrade, please try again.");
+                                    rank = v.getUpgradeLevel();
+                                    currency = v.getCurrency();
+                                }
+                                p.upgradeRank(rank);
+                                if (currency == 0) {
+                                    p.removeDollars(b.getUpgrades()[0][rank - 2]);
+                                }
+                                else if (currency == 1) {
+                                    p.removeCredits(b.getUpgrades()[1][rank - 2]);
+                                }
+                            }
+                            else if (action == "locations") {
+
+                            }
+                            else if (action == "endgame") {
+                                
                             }
                         }
                     }
