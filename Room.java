@@ -46,7 +46,9 @@ public class Room {
         return 0;
     }
 
-    public void calculateBonuses(int a) {}
+    public void calculateBonuses() {}
+
+    public void replaceShotCounters() {}
 
     public Room() {}
 

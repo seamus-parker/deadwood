@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Board {
@@ -16,13 +17,14 @@ public class Board {
 
     private int deckIndex = 0;
 
-    void resetSceneCards(){
+    public void resetSceneCards(){
         for (int i = 0; i < sets.length; i++){
             if(sets[i] != getRoomByName("trailers") && sets[i] != getRoomByName("office")){
                 for (int j = 0; j < sets[i].getRoles().length; j++) {
                     sets[i].getRoles()[j].setTaken(false);
                 }
                 sets[i].newCard(deck[deckIndex]);
+                sets[i].replaceShotCounters();
                 sets[i].resetWrapped();
                 deckIndex++;
             }
@@ -76,14 +78,15 @@ public class Board {
     }
 
    
-    // Move players back to trailers, deal new scenes & replace shot counters
-    public void endDay(){
+    // Move players back to trailers and reset their states
+    public void endDay() {
         for (int i=0; i < players.length; i++ ){
-            this.players[i].acceptRole(null);
+            this.players[i].acceptRole(new Role());
             this.players[i].move(getRoomByName("trailer"));
             this.players[i].resetPracticeChips();
             this.players[i].resetActedOrReaheased();
             this.players[i].resetMove();
+            this.players[i].setWorking(false);
         }
     }
 
@@ -119,8 +122,9 @@ public class Board {
         return this.upgrades;
     }
 
-    // Determine the winner of the game and return their name
-    public Player calculateWinner() {
+    // Determine the winner(s) of the game and return them
+    public ArrayList<Player> calculateWinner() {
+        ArrayList<Player> p = new ArrayList<Player>();
         int score = 0;
         int maxScore = 0;
         int index = 0;
@@ -128,10 +132,15 @@ public class Board {
             score = players[i].getScore();
             if (score > maxScore) {
                 maxScore = score;
-                index = i;
             }
         }
-        return players[index];
+        for (int i = 0; i < players.length; i++) {
+            score = players[i].getScore();
+            if (score == maxScore) {
+                p.add(players[i]);
+            }
+        }
+        return p;
     }
 
     public Board(String[] playerNames, int numPlayers, Room[] sets,
@@ -162,7 +171,7 @@ public class Board {
         }
 
         for (int i = 0; i < numPlayers; i++) {
-            myPlayers[i] = new Player(playerNames[i], i, this.getRoomByName("trailers"));
+            myPlayers[i] = new Player(playerNames[i], i, this.getRoomByName("trailer"));
             myPlayers[i].addCredits(credits);
             myPlayers[i].upgradeRank(rank);
         }

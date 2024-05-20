@@ -16,17 +16,24 @@ public class View
     }
 
     // Print the name and info of the current active player
-    public void activePlayer(String name, int money, int credits, int rank, String location) {
-        System.out.println("The current active player is: " + name);
-        System.out.format("This player has %d dollars, %d credits, and a rank of %d\n", money, credits, rank);
-        System.out.println("Their current location is: " + location);
+    public void activePlayer(Player p) {
+        System.out.println("The current active player is: " + p.getName());
+        System.out.format("This player has %d dollars, %d credits, and a rank of %d\n",
+                          p.getDollars(), p.getCredits(), p.getRank());
+        System.out.println("Their current location is: " + p.getLocation().getName());
+        if (!p.getCurrentRole().getName().equals("none")) {
+            System.out.format("Currently working on %s (level %d), \"%s\"\n",
+                              p.getCurrentRole().getName(),
+                              p.getCurrentRole().getLevel(),
+                              p.getCurrentRole().getLine());
+        }
     }
 
     // Display location of all players and indicate the active player
     public void playerLocations(Player[] players, int activePlayer) {
         System.out.println("Displaying current location of all players...");
         for (int i = 0; i < players.length; i++) {
-            System.out.println(players[i].getName() + ": " + players[i].getLocation());
+            System.out.println(players[i].getName() + ": " + players[i].getLocation().getName());
         }
         System.out.println("Current active player: " + players[activePlayer].getName());
     }
@@ -60,6 +67,9 @@ public class View
         else if (a.contains("rehearse")) {
             return "rehearse";
         }
+        else if (a.contains("upgrade menu")) {
+            return "upgrademenu";
+        }
         else if (a.contains("upgrade")) {
             return "upgrade";
         }
@@ -74,6 +84,9 @@ public class View
         }
         else if (a.contains("where")) {
             return "where";
+        }
+        else if (a.contains("info")) {
+            return "info";
         }
         else return "invalid";
     }
@@ -155,8 +168,8 @@ public class View
         System.out.println("Upgrade costs: ");
         System.out.println("Rank   |   Dollars   |   Credits");
         for (int i = 0; i < upgrades[0].length; i++) {
-            System.out.println(Integer.toString(i) + "          " + 
-            Integer.toString(upgrades[0][i]) + "          " + 
+            System.out.println(Integer.toString(i+2) + "          " + 
+            Integer.toString(upgrades[0][i]) + "             " + 
             Integer.toString(upgrades[1][i]));
         }
     }
@@ -182,14 +195,25 @@ public class View
     }
 
     // Display confirmation that a player ended their turn
-    public void endedTurn(String player){}
+    public void endedTurn(String player) {
+        System.out.format("%s has ended their turn\n", player);
+    }
 
     // Declare current day to have ended, display new current day
     public void endedDay(int day){}
 
     // Display end of game, report winner
-    public void endedGame(String winner) {
-        System.out.println("Game over! " + winner + " wins!");
+    public void endedGame(ArrayList<Player> winners) {
+        if (winners.size() == 1) {
+            System.out.println("Game over! " + winners.get(0).getName() + " wins!");
+        }
+        else {
+            System.out.print("Game over! It's a tie between ");
+            for (int i = 0; i < winners.size()-1; i++) {
+                System.out.print(winners.get(i).getName() + ", ");
+            }
+            System.out.format("and %s!\n", winners.get(winners.size()-1).getName());
+        }
     }
     
     public View() {
@@ -249,16 +273,45 @@ public class View
         System.out.println("Current location: " + p.getLocation().getName());
         if (!(l.equals("trailer") || l.equals("office"))) {
             Scene scene = p.getLocation().getCard();
-            System.out.println("Scene: " + scene.getName());
-            System.out.print("Roles: ");
-            for (int i = 0; i < scene.getRoles().length-1; i++) {
-                System.out.format("%s (level %d), ", 
-                                  scene.getRoles()[i].getName(), 
-                                  scene.getRoles()[i].getLevel());
+            Room room = p.getLocation();
+            System.out.format("Scene #%d: %s ($%dM budget)\n",
+                              scene.getNum(), scene.getName(), scene.getBudget());
+            if (p.getLocation().isWrapped()) {
+                System.out.println("wrapped");
             }
-            System.out.format("%s (level %d).", 
-                                  scene.getRoles()[scene.getRoles().length-1].getName(), 
-                                  scene.getRoles()[scene.getRoles().length-1].getLevel());
-        }
+            else {
+                System.out.format("%d shot(s) remaining\n", p.getLocation().getShotCounters());
+                System.out.print("On-card roles: ");
+                for (int i = 0; i < scene.getRoles().length-1; i++) {
+                    System.out.format("%s (level %d), ", 
+                                      scene.getRoles()[i].getName(), 
+                                      scene.getRoles()[i].getLevel());
+                }
+                System.out.format("%s (level %d).\n", 
+                                      scene.getRoles()[scene.getRoles().length-1].getName(), 
+                                      scene.getRoles()[scene.getRoles().length-1].getLevel());
+                System.out.print("Off-card roles: ");
+                for (int i = 0; i < room.getRoles().length-1; i++) {
+                    System.out.format("%s (level %d), ", 
+                    room.getRoles()[i].getName(), 
+                    room.getRoles()[i].getLevel());
+                }
+                System.out.format("%s (level %d).\n", 
+                room.getRoles()[room.getRoles().length-1].getName(), 
+                room.getRoles()[room.getRoles().length-1].getLevel());
+            }
+            }
+    }
+
+    public void sceneWrapped() {
+        System.out.println("Scene wrapped!");
+    }
+
+    public void endDay() {
+        System.out.println("Day ended.");
+    }
+
+    public void beginDay(int days) {
+        System.out.format("The sun rises in Deadwood. %d day(s) remaining.\n", days);
     }
 }

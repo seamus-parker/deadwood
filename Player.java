@@ -21,7 +21,7 @@ public class Player
     this.dollars = 0;
     this.credits = 0;
     this.rank = 1;
-    this.currentRole = null;
+    this.currentRole = new Role();
     this.location = startingRoom;
     this.idNumber = idNumber;
     this.practiceChips = 0;
@@ -68,6 +68,8 @@ public class Player
     rank = newRank;
   }
   public void acceptRole(Role newRole){
+    this.isWorking = true;
+    this.hasActedOrRehearsed = true;
     currentRole = newRole;
     newRole.setTaken(true);
     if (newRole.isOnCard()) {
@@ -78,7 +80,7 @@ public class Player
     }
   }
   public void resetRole(){
-    currentRole = null;
+    currentRole = new Role();
   }
   public void rehearsal(){
     //player gets +1 to thier practice chips
@@ -119,25 +121,16 @@ public class Player
 
   public ArrayList<String> getPossibleActions() {
     ArrayList<String> actions = new ArrayList<String>();
-    if (!this.isWorking) {
-      if (!this.hasMoved) {
-        actions.add("move");
-      }
-      if (this.getPossibleRoles().size() > 0) {
-        actions.add("take role");
-      }
-    }
-    else if (!hasActedOrRehearsed) {
-      actions.add("act");
-      if (this.practiceChips < this.currentRole.getLevel()) {
-        actions.add("rehearse");
-      }
-    }
+    if (this.canMove()) actions.add("move");
+    if (this.canWork()) actions.add("work");
+    if (this.canAct()) actions.add("act");
+    if (this.canRehearse()) actions.add("rehearse");
+    if (this.canUpgrade()) actions.add("upgrade");
     return actions;
   }
 
   public boolean canMove() {
-    if (this.isWorking || this.hasMoved) {
+    if (this.isWorking || this.hasMoved || this.hasActedOrRehearsed) {
       return false;
     }
     else {
@@ -165,7 +158,7 @@ public class Player
 
   public boolean canRehearse() {
     if (this.isWorking && !this.hasActedOrRehearsed
-    && this.practiceChips < this.currentRole.getLevel()) {
+    && this.practiceChips < this.location.getCard().getBudget()) {
       return true;
     }
     else {
@@ -185,6 +178,8 @@ public class Player
   public String[] getPossibleMoves(){
     return this.location.getNeighbors();
   }
+
+  // get possible roles a player can take on the current set
   public ArrayList<Role> getPossibleRoles(){
     if (this.location.isWrapped()) return new ArrayList<Role>();
     Role[] onCardRoles = this.location.getCard().getRoles();
@@ -202,36 +197,17 @@ public class Player
     }
     return avaliableRoles;
   }
-  public int getAffordableUpgrades(){
-    //determine availible ranks for upgrade to Player
-    int highestRank = 0;
-    if ((credits <= 25) || (dollars <= 40)){
-      return highestRank + 6;
-    }else if ((credits <= 20) || (dollars <= 28)){
-      return highestRank + 5;
-    }else if ((credits <= 15) || (dollars <= 18)){
-      return highestRank + 4;
-    }else if ((credits <= 10) || (dollars <= 10)){
-      return highestRank + 3;
-    }else if ((credits <= 5) || (dollars <= 4)){
-      return highestRank + 2;
-    }else{
-      return highestRank;
-    }
-  }
+
   public int getDollars(){
     return dollars;
   }
   public int getCredits(){
     return credits;
   }
-  //player getters
-
-
 
   public boolean act() {
     
-    int budget = this.location.getCard().getBudget(); //access xml file and assign budget of the current scene card
+    int budget = this.location.getCard().getBudget(); 
     int dieRoll = (int) (Math.random() * 6) + 1;
     playerActedOrReheased();
     int result = dieRoll + this.practiceChips;
@@ -240,10 +216,11 @@ public class Player
       if (this.currentRole.isOnCard()){
         addCredits(2);
       }else{
-        addDollars(2);
+        addDollars(1);
+        addCredits(1);
       }
       if (this.location.getShotCounters() == 0){
-        this.location.calculateBonuses(this.location.getBudget());
+        this.location.calculateBonuses();
       }
       return true;
     }else{
@@ -297,5 +274,9 @@ public class Player
     }else{
       return false;
     }
+  }
+
+  public void setWorking(boolean b) {
+    this.isWorking = b;
   }
 }

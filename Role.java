@@ -1,7 +1,7 @@
 public class Role {
     
     int level;
-    String name;
+    String name = "none";
     String line;
     boolean onCard;
     int x;
@@ -9,6 +9,8 @@ public class Role {
     int h;
     int w;
     boolean taken = false;
+
+    public Role() {}
 
     public Role(int myLevel, String myName, String myLine, boolean isOnCard,
                 int myX, int myY, int myH, int myW) {

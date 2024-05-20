@@ -14,10 +14,10 @@ public class Deadwood {
         boolean gameEnded = false;
         while (b.getDays() > 0) {
             b.resetSceneCards();
+            v.beginDay(b.getDays());
             while (b.activeScenes() > 1) {
                 Player p = b.getActivePlayer();
-                v.activePlayer(p.getName(), p.getDollars(), p.getCredits(),
-                               p.getRank(), p.getLocation().getName());
+                v.activePlayer(p);
                     while (p.getPossibleActions().size() > 0) {
                         v.possibleActions(p.getPossibleActions());
                         String action = v.actionInput();
@@ -44,26 +44,34 @@ public class Deadwood {
                             else if (action == "act") {
                                 boolean success = p.act();
                                 v.playerActed(success);
+                                if (p.getLocation().isWrapped()) {
+                                    v.sceneWrapped();
+                                }
                             }
                             else if (action == "rehearse") {
                                 p.rehearsal();
                                 v.playerRehearsed(p.getName(), p.getPracticeChips());
                             }
                             else if (action == "upgrade") {
-                                v.upgradeTable(b.getUpgrades());
-                                int rank = v.getUpgradeLevel();
-                                int currency = v.getCurrency();
-                                while (!p.canAffordUpgrade(rank, b.getUpgrades(), currency)) {
-                                    System.out.println("Can\'t afford selected upgrade, please try again.");
-                                    rank = v.getUpgradeLevel();
-                                    currency = v.getCurrency();
+                                if (!p.affordUpgrade(b.getUpgrades())) {
+                                    System.out.println("Can\'t afford any upgrades");
                                 }
-                                p.upgradeRank(rank);
-                                if (currency == 0) {
-                                    p.removeDollars(b.getUpgrades()[0][rank - 2]);
-                                }
-                                else if (currency == 1) {
-                                    p.removeCredits(b.getUpgrades()[1][rank - 2]);
+                                else {
+                                    v.upgradeTable(b.getUpgrades());
+                                    int rank = v.getUpgradeLevel();
+                                    int currency = v.getCurrency();
+                                    while (!p.canAffordUpgrade(rank, b.getUpgrades(), currency)) {
+                                        System.out.println("Can\'t afford selected upgrade, please try again.");
+                                        rank = v.getUpgradeLevel();
+                                        currency = v.getCurrency();
+                                    }
+                                    p.upgradeRank(rank);
+                                    if (currency == 0) {
+                                        p.removeDollars(b.getUpgrades()[0][rank - 2]);
+                                    }
+                                    else if (currency == 1) {
+                                        p.removeCredits(b.getUpgrades()[1][rank - 2]);
+                                    }
                                 }
                             }
                             else if (action == "locations") {
@@ -76,17 +84,28 @@ public class Deadwood {
                             else if (action == "where") {
                                 v.getLocationInfo(p);
                             }
+                            else if (action == "upgrademenu") {
+                                v.upgradeTable(b.getUpgrades());
+                            }
+                            else if (action == "info") {
+                                v.activePlayer(p);
+                            }
                         }
                     }
                     
                 // end player's turn
+                v.endedTurn(p.getName());
+                p.endTurn();
+                b.nextPlayer();
                 if (gameEnded) break;
             }
             // reset board for next day
+            b.endDay();
+            v.endDay();
             if (gameEnded) break;
         }
-        Player winner = b.calculateWinner();
-        v.endedGame(winner.getName());
+        ArrayList<Player> winners = b.calculateWinner();
+        v.endedGame(winners);
     }
     
 }

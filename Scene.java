@@ -17,6 +17,9 @@ public class Scene
   public int getBudget() {
     return this.budget;
   }
+  public int getNum() {
+    return this.sceneNum;
+  }
 
   public Player[] getSortedPlayers() {
     ArrayList<Player> unsorted = this.playersOnCard;

@@ -12,7 +12,7 @@ public class Set extends Room{
 
     public boolean wrapped = false;
   
-    public ArrayList<Player> extras;
+    public ArrayList<Player> extras = new ArrayList<Player>();
 
     public Scene getCard(){
         return this.card;
@@ -22,21 +22,20 @@ public class Set extends Room{
     }
 
 
+    // reset status of players who were working on scene
     public void setWrapUp(){
-	    //get all players on set(on and off card) into list/Array
         Player[] playerList = card.getSortedPlayers();
-        //need function to get all players with off card roles, 
-        //playerList should be a combination of getsortedPlayers
-        //and an array of the off card players
 	    for (int i = 0; i < playerList.length; i++){
 	        playerList[i].resetPracticeChips();
 	        playerList[i].resetRole();
+            playerList[i].setWorking(false);
 	    }
         wrapped = true;
-        Player[] extras = this.getExtras();
-        for (int i = 0; i < extras.length; i++){
-	        playerList[i].resetPracticeChips();
-	        playerList[i].resetRole();
+        Player[] myExtras = this.getExtras();
+        for (int i = 0; i < myExtras.length; i++){
+	        myExtras[i].resetPracticeChips();
+	        myExtras[i].resetRole();
+            myExtras[i].setWorking(false);
 	    }
 
         this.extras = new ArrayList<Player>();
@@ -65,12 +64,17 @@ public class Set extends Room{
         this.shotCounters = this.shots;
     }
 
+    public int getShotCounters() {
+        return this.shotCounters;
+    }
+
     public boolean isWrapped() {
         return this.wrapped;
     }
 
     // calculate and distribute bonuses to players working on the card
-     public void calculateBonuses(int budget){
+     public void calculateBonuses(){
+        int budget = this.card.getBudget();
         int[] bonusResults = new int[6];
         for (int i = 0; i < 6; i++){
             if (i<budget){
@@ -89,7 +93,6 @@ public class Set extends Room{
                 int bonusAmount = playersOffCard[i].getCurrentRole().getLevel();
                 playersOffCard[i].addDollars(bonusAmount);
             }
-
         }
 
         if (playersOnCard == 3){
@@ -107,10 +110,6 @@ public class Set extends Room{
             playerArray[0].addDollars(bonusResults[1]);
             playerArray[0].addDollars(bonusResults[3]);
             playerArray[0].addDollars(bonusResults[5]);
-            for (int i = 0; i < playersOffCard.length; i++){
-                int bonusAmount = playersOffCard[i].getCurrentRole().getLevel();
-                playersOffCard[i].addDollars(bonusAmount);
-            }
         }else if (playersOnCard == 1){
             playerArray[0].addDollars(bonusResults[0]);
             playerArray[0].addDollars(bonusResults[1]);
@@ -118,10 +117,6 @@ public class Set extends Room{
             playerArray[0].addDollars(bonusResults[3]);
             playerArray[0].addDollars(bonusResults[4]);
             playerArray[0].addDollars(bonusResults[5]);
-            for (int i = 0; i < playersOffCard.length; i++){
-                int bonusAmount = playersOffCard[i].getCurrentRole().getLevel();
-                playersOffCard[i].addDollars(bonusAmount);
-            }
         }
         setWrapUp();
     }
