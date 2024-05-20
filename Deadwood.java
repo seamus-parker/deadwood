@@ -12,6 +12,7 @@ public class Deadwood {
         Random rnd = new Random();
         b.setActivePlayer(rnd.nextInt(numPlayers));
         while (b.getDays() > 0) {
+            b.resetSceneCards();
             while (b.activeScenes() > 1) {
                 Player p = b.getActivePlayer();
                 v.activePlayer(p.getName(), p.getDollars(), p.getCredits(),

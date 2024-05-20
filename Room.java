@@ -12,6 +12,9 @@ public class Room {
     String[] getNeighbors() {
         return this.neighbors;
     }
+    public void newCard(Scene card){
+    }
+    public void resetWrapped(){}
 
     public void setNeighbors(String[] myNeighbors) {
         this.neighbors = myNeighbors;

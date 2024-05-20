@@ -17,6 +17,9 @@ public class Set extends Room{
     public Scene getCard(){
         return this.card;
     }
+    public void newCard(Scene card){
+        this.card = card;
+    }
 
 
     public void setWrapUp(){
@@ -41,6 +44,9 @@ public class Set extends Room{
 
     public void addExtra(Player p) {
         this.extras.add(p);
+    }
+    public void resetWrapped(){
+        this.wrapped = false;
     }
 
     public Player[] getExtras() {
@@ -77,9 +83,6 @@ public class Set extends Room{
         Player[] playerArray = card.getSortedPlayers();
         int playersOnCard = playerArray.length;
         Arrays.sort(bonusResults);
-        //need an array of players with off card rolls to 
-        //provide bonuses for them, array declaration below
-
         Player[] playersOffCard = this.getExtras();
         if (playersOnCard > 0){
             for (int i = 0; i < playersOffCard.length; i++){
