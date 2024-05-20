@@ -1,3 +1,4 @@
+github repo link https://github.com/seamus-parker/deadwood
 # deadwood
 To run the program, first compile all java files ("javac filename.java"), then to run the game use "java Deadwood.java x", where x is the desired number of players.
 The program takes a command line input for the number of players.
