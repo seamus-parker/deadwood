@@ -5,6 +5,7 @@ After taking player names for input and setting up the game the game selects a r
 The program displays player attributes and the actions that it is possible to take.
 The player may input the commands until they either choose to end the turn or run out of possible actions
 Aside from the players actions there are inputs that can be given to recive information
+
 Player action commands (case sensetive)
 1. "move"
 2. "work" (take role)
