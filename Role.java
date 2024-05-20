@@ -8,6 +8,7 @@ public class Role {
     int y; 
     int h;
     int w;
+    boolean taken = false;
 
     public Role(int myLevel, String myName, String myLine, boolean isOnCard,
                 int myX, int myY, int myH, int myW) {
@@ -35,6 +36,14 @@ public class Role {
     
     public boolean isOnCard() {
         return this.onCard;
+    }
+
+    public boolean isTaken() {
+        return this.taken;
+    }
+
+    public void setTaken(boolean b) {
+        this.taken = b;
     }
 
     public void print() {

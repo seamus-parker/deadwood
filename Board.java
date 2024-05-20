@@ -102,7 +102,19 @@ public class Board {
     }
 
     // Determine the winner of the game and return their name
-    public String calculateWinner(String[] names, int[] ranks){ return ""; }
+    public Player calculateWinner() {
+        int score = 0;
+        int maxScore = 0;
+        int index = 0;
+        for (int i = 0; i < players.length; i++) {
+            score = players[i].getScore();
+            if (score > maxScore) {
+                maxScore = score;
+                index = i;
+            }
+        }
+        return players[index];
+    }
 
     public Board(String[] playerNames, int numPlayers, Room[] sets,
                  Scene[] deck, int[][] upgrades) {
@@ -140,5 +152,9 @@ public class Board {
         this.players = myPlayers;
 
         shuffle();
+    }
+
+    public Player[] getPlayers() {
+        return this.players;
     }
 }

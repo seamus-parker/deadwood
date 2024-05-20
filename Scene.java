@@ -66,4 +66,7 @@ public class Scene
       this.roles[i].print();
     }
   }
+  public String getName() {
+    return this.name;
+  }
 }

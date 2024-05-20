@@ -69,6 +69,7 @@ public class Player
   }
   public void acceptRole(Role newRole){
     currentRole = newRole;
+    newRole.setTaken(true);
     if (newRole.isOnCard()) {
       this.location.getCard().addPlayer(this);
     }
@@ -185,17 +186,17 @@ public class Player
     return this.location.getNeighbors();
   }
   public ArrayList<Role> getPossibleRoles(){
- 
+    if (this.location.isWrapped()) return new ArrayList<Role>();
     Role[] onCardRoles = this.location.getCard().getRoles();
     Role[] offCardRoles = this.location.getRoles();
     ArrayList<Role> avaliableRoles = new ArrayList<Role>();
     for (int i = 0; i < onCardRoles.length;i++){
-      if (onCardRoles[i].getLevel() <= this.rank){
+      if (onCardRoles[i].getLevel() <= this.rank && !onCardRoles[i].isTaken()){
         avaliableRoles.add(onCardRoles[i]);
       }
     }
     for (int i = 0; i < offCardRoles.length;i++){
-      if (offCardRoles[i].getLevel() <= this.rank){
+      if (offCardRoles[i].getLevel() <= this.rank && !offCardRoles[i].isTaken()){
         avaliableRoles.add(offCardRoles[i]);
       }
     }

@@ -11,6 +11,7 @@ public class Deadwood {
         parser.readRoomData("board.xml"), parser.readSceneData("cards.xml"), parser.getUpgradeData("board.xml"));
         Random rnd = new Random();
         b.setActivePlayer(rnd.nextInt(numPlayers));
+        boolean gameEnded = false;
         while (b.getDays() > 0) {
             while (b.activeScenes() > 1) {
                 Player p = b.getActivePlayer();
@@ -65,19 +66,26 @@ public class Deadwood {
                                 }
                             }
                             else if (action == "locations") {
-
+                                v.playerLocations(b.getPlayers(), b.getActivePlayer().getId());
                             }
                             else if (action == "endgame") {
-                                
+                                gameEnded = true;
+                                break;
+                            }
+                            else if (action == "where") {
+                                v.getLocationInfo(p);
                             }
                         }
                     }
                     
-                // next player's turn
+                // end player's turn
+                if (gameEnded) break;
             }
-
+            // reset board for next day
+            if (gameEnded) break;
         }
-
+        Player winner = b.calculateWinner();
+        v.endedGame(winner.getName());
     }
     
 }
