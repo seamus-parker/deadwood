@@ -11,7 +11,6 @@ public class Deadwood {
         parser.readRoomData("board.xml"), parser.readSceneData("cards.xml"), parser.getUpgradeData("board.xml"));
         Random rnd = new Random();
         b.setActivePlayer(rnd.nextInt(numPlayers));
-        GameManager gm = new GameManager();
         while (b.getDays() > 0) {
             while (b.activeScenes() > 1) {
                 Player p = b.getActivePlayer();
@@ -20,7 +19,7 @@ public class Deadwood {
                     while (p.getPossibleActions().size() > 0) {
                         v.possibleActions(p.getPossibleActions());
                         String action = v.actionInput();
-                        while (!gm.validateActionInput(p, action)) {
+                        while (!b.validateActionInput(p, action)) {
                             System.out.format("Invalid action \'%s\' given. Please enter a valid action.\n", action);
                             action = v.actionInput();
                         }

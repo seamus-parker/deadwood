@@ -60,11 +60,38 @@ public class Board {
         }
     }
 
-    // Set up the board, initialize player locations, money/credits, rank, etc.
-    public void beginGame(int numPlayers) {}
-
+   
     // Move players back to trailers, deal new scenes & replace shot counters
-    public void endDay(){}
+    public void endDay(){
+        for (int i=0; i < players.length; i++ ){
+            this.players[i].acceptRole(null);
+            this.players[i].move(getRoomByName("trailer"));
+        }
+    }
+
+    public boolean validateActionInput(Player p, String action) {
+        if (action == "move") {
+            return p.canMove();
+        }
+        else if (action == "work") {
+            return p.canWork();
+        }
+        else if (action == "act") {
+            return p.canAct();
+        }
+        else if (action == "rehearse") {
+            return p.canRehearse();
+        }
+        else if (action == "upgrade") {
+            return p.canUpgrade();
+        }
+        else if (action == "invalid") {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
 
     public int getDays() {
         return this.days;
