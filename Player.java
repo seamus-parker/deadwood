@@ -84,6 +84,10 @@ public class Player
     hasActedOrRehearsed = true;
     practiceChips++;
   }
+  public void endTurn(){
+    this.resetActedOrReaheased();
+    this.resetMove();
+}
   
 
   //player getters
@@ -251,14 +255,14 @@ public class Player
   
   
   public boolean enoughDollars(int amount){
-    if (amount <= dollars){
+    if (amount <= this.dollars){
       return true;
     }else{
       return false;
     }
   }
   public boolean enoughCredits(int amount){
-    if (amount <= credits){
+    if (amount <= this.credits){
       return true;
     }else{
       return false;
@@ -268,5 +272,29 @@ public class Player
   public void move (Room location) {
     this.setLocation(location);
     this.hasMoved = true;
+  }
+  public boolean affordUpgrade(int[][] upgrades){
+    if (this.rank == 6){
+      return false;
+    }else if (enoughCredits(upgrades[1][this.rank - 1])
+                               || enoughDollars(upgrades[0][this.rank -1])){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  public boolean canAffordUpgrade(int desiredRank, int[][] upgrades, int typeCurrency){
+    if (desiredRank >= 7 || desiredRank <= this.rank){
+      return false;
+    }
+    int price = upgrades[typeCurrency][desiredRank-2];
+    if (typeCurrency == 0){
+      return enoughDollars(price);
+
+    }else if (typeCurrency ==1){
+      return enoughCredits(price);
+    }else{
+      return false;
+    }
   }
 }
