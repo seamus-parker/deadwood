@@ -23,12 +23,12 @@ public class View
     }
 
     // Display location of all players and indicate the active player
-    public void playerLocations(String[] names, String[] locations, int activePlayer) {
+    public void playerLocations(Player[] players, int activePlayer) {
         System.out.println("Displaying current location of all players...");
-        for (int i = 0; i < names.length; i++) {
-            System.out.println(names[i] + ": " + locations[i]);
+        for (int i = 0; i < players.length; i++) {
+            System.out.println(players[i].getName() + ": " + players[i].getLocation());
         }
-        System.out.println("Current active player: " + names[activePlayer]);
+        System.out.println("Current active player: " + players[activePlayer].getName());
     }
 
     // Display all possible actions a player could take
@@ -71,6 +71,9 @@ public class View
         }
         else if (a.contains("locations")) {
             return "locations";
+        }
+        else if (a.contains("where")) {
+            return "where";
         }
         else return "invalid";
     }
@@ -238,6 +241,24 @@ public class View
         }
         else {
             return false;
+        }
+    }
+
+    public void getLocationInfo(Player p) {
+        String l = p.getLocation().getName();
+        System.out.println("Current location: " + p.getLocation().getName());
+        if (!(l.equals("trailer") || l.equals("office"))) {
+            Scene scene = p.getLocation().getCard();
+            System.out.println("Scene: " + scene.getName());
+            System.out.print("Roles: ");
+            for (int i = 0; i < scene.getRoles().length-1; i++) {
+                System.out.format("%s (level %d), ", 
+                                  scene.getRoles()[i].getName(), 
+                                  scene.getRoles()[i].getLevel());
+            }
+            System.out.format("%s (level %d).", 
+                                  scene.getRoles()[scene.getRoles().length-1].getName(), 
+                                  scene.getRoles()[scene.getRoles().length-1].getLevel());
         }
     }
 }
