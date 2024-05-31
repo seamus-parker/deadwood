@@ -66,6 +66,10 @@ public class Room {
         return new Role[0];
     }
 
+    public int[][] getShotCoords() {
+        return new int[0][0];
+    }
+
     public void print() {
         System.out.println("name: " + this.name);
         System.out.println("neighbors: ");

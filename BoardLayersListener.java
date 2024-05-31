@@ -152,6 +152,9 @@ public class BoardLayersListener extends JFrame {
   // remove shot counters (Room location)
 
   // replace shot counters (Room location)
+  public void replaceShotCounters(Room location) {
+   
+  }
 
   // add player to role (Role, Room location, boolean onCard)
   
