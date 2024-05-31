@@ -9,6 +9,19 @@ public class Room {
     protected int h;
     protected int w;
 
+    public int getXCorodinates(Room emptySet){
+        return emptySet.x;
+    }
+    public int getYCorodinates(Room emptySet){
+        return emptySet.y;
+    }
+    public int getHCorodinates(Room emptySet){
+        return emptySet.h;
+    }
+    public int getWCorodinates(Room emptySet){
+        return emptySet.w;
+    }
+
     String[] getNeighbors() {
         return this.neighbors;
     }
