@@ -51,6 +51,7 @@ public class XMLParser{
             String roomName = "";
             String[] roomNeighbors = new String[0];
             int roomTakes = 0;
+            int[][] takeCoords = new int[0][0];
             Role[] roomParts = new Role[0];
             int x = 0;
             int y = 0;
@@ -77,6 +78,7 @@ public class XMLParser{
                         NodeList takes = sub.getChildNodes();
                         Integer numTakes = (takes.getLength()-1) / 2;
                         roomTakes = numTakes;
+                        takeCoords = getTakeCoords(sub, roomTakes);
                     }
                     else if("parts".equals(sub.getNodeName())){
                         roomParts = getParts(sub, false);
@@ -89,7 +91,7 @@ public class XMLParser{
                     }
                             
                 } //for childnodes
-                gameBoard[i] = new Set(roomName, roomNeighbors, roomParts, roomTakes, x, y, h, w);
+                gameBoard[i] = new Set(roomName, roomNeighbors, roomParts, roomTakes, x, y, h, w, takeCoords);
                 
             }//for book nodes
 
@@ -269,4 +271,19 @@ public class XMLParser{
             return upgrades;
         }
 
+        private int[][] getTakeCoords(Node n, int totalTakes) {
+            NodeList children = n.getChildNodes();
+            int[][] coords = new int[2][totalTakes];
+            int currentTake = 0;
+            for (int i = 0; i < children.getLength(); i++) {
+                Node sub = children.item(i);
+                if ("take".equals(sub.getNodeName())) {
+                    Node area = sub.getChildNodes().item(0);
+                    coords[0][currentTake] = Integer.valueOf(area.getAttributes().getNamedItem("x").getNodeValue());
+                    coords[1][currentTake] = Integer.valueOf(area.getAttributes().getNamedItem("y").getNodeValue());
+                    currentTake++;
+                }
+            }
+            return coords;
+        }
 }//class

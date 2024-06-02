@@ -14,6 +14,8 @@ public class Set extends Room{
   
     public ArrayList<Player> extras = new ArrayList<Player>();
 
+    private int[][] shotCoords;
+
     public Scene getCard(){
         return this.card;
     }
@@ -121,8 +123,8 @@ public class Set extends Room{
         setWrapUp();
     }
 
-    public Set(String myName, String[] myNeighbors, Role[] myRoles,
-               int numShots, int myX, int myY, int myH, int myW) {
+    public Set(String myName, String[] myNeighbors, Role[] myRoles, int numShots,
+               int myX, int myY, int myH, int myW, int[][] takeCoords) {
         super.setName(myName);
         super.setNeighbors(myNeighbors);
         this.roles = myRoles;
@@ -132,9 +134,14 @@ public class Set extends Room{
         this.y = myY;
         this.h = myH;
         this.w = myW;
+        this.shotCoords = takeCoords;
     }
     public Role[] getRoles(){
         return this.roles;
+    }
+
+    public int[][] getShotCoords() {
+        return this.shotCoords;
     }
 
     public void print() {

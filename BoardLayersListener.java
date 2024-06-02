@@ -30,6 +30,7 @@ public class BoardLayersListener extends JFrame {
   JButton bEndTurn = new JButton("END TURN");
   JButton bEndGame = new JButton("END GAME");
   JButton[] actionButtons = {bMove, bTakeRole, bAct, bRehearse, bUpgrade, bEndTurn, bEndGame};
+
   JButton bTrailers = new JButton("Trailers");
   JButton bMainSteet = new JButton("Main Street");
   JButton bSaloon = new JButton("Saloon");
@@ -43,7 +44,6 @@ public class BoardLayersListener extends JFrame {
   JButton bBank = new JButton("Bank");
   JButton bHotel = new JButton("Hotel");
   JButton[] movementButtons = {bTrailers, bMainSteet, bSaloon,bGeneralStore,bTrainStation,bJail,bCastingOffice,bRanch,bSecretHideout,bChurch,bBank,bHotel};
-
 
   // JLayered Pane
   JLayeredPane bPane;
@@ -164,6 +164,7 @@ public class BoardLayersListener extends JFrame {
        }
 
       // test actionMenu
+
         ArrayList<String> a = new ArrayList<>();
         a.add("work");
         a.add("move");
@@ -216,6 +217,9 @@ public class BoardLayersListener extends JFrame {
   // remove shot counters (Room location)
 
   // replace shot counters (Room location)
+  public void replaceShotCounters(Room location) {
+   
+  }
 
   // add player to role (Role, Room location, boolean onCard)
   
