@@ -106,35 +106,44 @@ public class BoardLayersListener extends JFrame {
          b.addMouseListener(new boardMouseListener());
          b.setFont(new Font("Arial", Font.PLAIN,20));
          b.setVisible(false);
+         b.setEnabled(false);
        }
        //Add all location buttons to the board, must be done individually since all have unique locations
        bMainSteet.setBounds(icon.getIconWidth()-220,150,200,40);
        bPane.add(bMainSteet,new Integer(2));
-       bMainSteet.setVisible(true);
 
        bTrailers.setBounds(icon.getIconWidth()-165,280,120,27);
        bPane.add(bTrailers,new Integer(2));
-       bTrailers.setVisible(true);
 
        bSaloon.setBounds(icon.getIconWidth()-520,405,100,30);
        bPane.add(bSaloon,new Integer(2));
-       bSaloon.setVisible(true);
 
        bBank.setBounds(icon.getIconWidth()-520,597,100,35);
        bPane.add(bBank,new Integer(2));
-       bBank.setVisible(true);
 
        bJail.setBounds(345,150,75,30);
        bPane.add(bJail,new Integer(2));
-       bJail.setVisible(true);
 
        bGeneralStore.setBounds(375,405,200,30);
        bPane.add(bGeneralStore,new Integer(2));
-       bGeneralStore.setVisible(true);
 
        bTrainStation.setBounds(30,190,200,30);
        bPane.add(bTrainStation,new Integer(2));
-       bTrainStation.setVisible(true);
+
+       bCastingOffice.setBounds(22,470,190,35);
+       bPane.add(bCastingOffice,new Integer(2));
+
+       bRanch.setBounds(280,600,100,40);
+       bPane.add(bRanch,new Integer(2));
+
+       bSecretHideout.setBounds(20,850,210,40);
+       bPane.add(bSecretHideout,new Integer(2));
+
+       bChurch.setBounds(icon.getIconWidth()-525,855,100,35);
+       bPane.add(bChurch,new Integer(2));
+
+       bHotel.setBounds(icon.getIconWidth()-190,862,100,30);
+       bPane.add(bHotel,new Integer(2));
 
       
 
@@ -225,6 +234,53 @@ public class BoardLayersListener extends JFrame {
             System.out.println("Rehearse is Selected\n");
          }
          else if (e.getSource()== bMove){
+            //enable appropiate movement buttons
+            String[] movementOptions = new String[2];
+            //movementoptions is a placeholder, should call get possible moves
+            //on the active player and copy the returned String[] to movementOptions
+            //loop checks wich locations are availible to be moved too and enables the 
+            //appropriate buttons.
+            for (int i =0; i< movementOptions.length;i++){
+               if (movementOptions[0] == "Trailers"){
+                  bTrailers.setVisible(true);
+                  bTrailers.setEnabled(true);
+               }else if (movementOptions[i]=="Casting Office"){
+                  bCastingOffice.setVisible(true);
+                  bCastingOffice.setEnabled(true);
+               }else if (movementOptions[i]=="Main Street"){
+                  bMainSteet.setVisible(true);
+                  bMainSteet.setEnabled(true);
+               }else if (movementOptions[i]=="Saloon"){
+                  bSaloon.setVisible(true);
+                  bSaloon.setEnabled(true);
+               }else if (movementOptions[i]=="Ranch"){
+                  bRanch.setVisible(true);
+                  bRanch.setEnabled(true);
+               }else if (movementOptions[i]=="Secret Hideout"){
+                  bSecretHideout.setVisible(true);
+                  bSecretHideout.setEnabled(true);
+               }else if (movementOptions[i]=="Bank"){
+                  bBank.setVisible(true);
+                  bBank.setEnabled(true);
+               }else if (movementOptions[i]=="Church"){
+                  bChurch.setVisible(true);
+                  bChurch.setEnabled(true);
+               }else if (movementOptions[i]=="Hotel"){
+                  bHotel.setVisible(true);
+                  bHotel.setEnabled(true);
+               }else if (movementOptions[i]=="Train Station"){
+                  bTrainStation.setVisible(true);
+                  bTrainStation.setEnabled(true);
+               }else if (movementOptions[i]=="Jail"){
+                  bJail.setVisible(true);
+                  bJail.setEnabled(true);
+               }else if (movementOptions[i]=="General Store"){
+                  bGeneralStore.setVisible(true);
+                  bGeneralStore.setEnabled(true);
+               }
+
+            }
+
             System.out.println("Move is Selected\n");
          }         
       }
