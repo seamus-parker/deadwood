@@ -9,17 +9,17 @@ public class Room {
     protected int h;
     protected int w;
 
-    public int getXCorodinates(Room emptySet){
-        return emptySet.x;
+    public int getXCorodinates(){
+        return this.x;
     }
-    public int getYCorodinates(Room emptySet){
-        return emptySet.y;
+    public int getYCorodinates(){
+        return this.y;
     }
-    public int getHCorodinates(Room emptySet){
-        return emptySet.h;
+    public int getHCorodinates(){
+        return this.h;
     }
-    public int getWCorodinates(Room emptySet){
-        return emptySet.w;
+    public int getWCorodinates(){
+        return this.w;
     }
 
     String[] getNeighbors() {
