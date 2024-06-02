@@ -47,6 +47,10 @@ public class Room {
         return 0;
     }
 
+    public int getShots() {
+        return -1; 
+    }
+
     public boolean isWrapped() { return true; }
 
     public Scene getCard() {

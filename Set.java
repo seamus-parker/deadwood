@@ -70,6 +70,10 @@ public class Set extends Room{
         return this.shotCounters;
     }
 
+    public int getShots() {
+        return this.shots;
+    }
+
     public boolean isWrapped() {
         return this.wrapped;
     }
