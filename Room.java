@@ -47,6 +47,10 @@ public class Room {
         return 0;
     }
 
+    public int getShots() {
+        return -1; 
+    }
+
     public boolean isWrapped() { return true; }
 
     public Scene getCard() {
@@ -77,6 +81,10 @@ public class Room {
 
     public Role[] getRoles() {
         return new Role[0];
+    }
+
+    public int[][] getShotCoords() {
+        return new int[0][0];
     }
 
     public void print() {
