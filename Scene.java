@@ -14,6 +14,9 @@ public class Scene
   public Role[] getRoles() {
     return this.roles;
   }
+  public String getImString(){
+    return this.img;
+  }
   public int getBudget() {
     return this.budget;
   }
