@@ -290,7 +290,7 @@ public class BoardLayersListener extends JFrame {
             cardBack.setBounds(x,y,205,115);
             cardBack.setOpaque(true);
             // Add the scene card to the lower level
-            bPane.add(cardlabel, new Integer(1));
+            bPane.add(cardlabel, Integer.valueOf(1));
          }
 
       }
@@ -306,7 +306,7 @@ public class BoardLayersListener extends JFrame {
       cardlabel.setOpaque(true);
      
       // Add the scene card to the upper level
-      bPane.add(cardlabel, new Integer(3));
+      bPane.add(cardlabel, Integer.valueOf(3));
    }
 
 
