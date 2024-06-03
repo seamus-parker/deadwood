@@ -111,9 +111,9 @@ public class BoardLayersListener extends JFrame {
        // Set the size of the GUI
        setSize(icon.getIconWidth()+300,icon.getIconHeight()+75);
        
-       // Add a scene card to this room
+       // test code for adding scene card locations
        cardlabel = new JLabel();
-       ImageIcon cIcon =  new ImageIcon("img/cards/cards/01.png");
+       ImageIcon cIcon =  new ImageIcon("img/CardBack-small.jpg");
        cardlabel.setIcon(cIcon); 
        cardlabel.setBounds(969,28,205,115);
        cardlabel.setOpaque(true);
@@ -124,17 +124,25 @@ public class BoardLayersListener extends JFrame {
       
 
     
-       // Add a dice to represent a player. 
-       // Role for Crusty the prospector. The x and y co-ordiantes are taken from Board.xml file
-       int yCord = 270;
-       for(int i = 0;i < numOfPlayers;i++){
+       // Add a die for each player. 
+       //yCord = 270 +=20, xCord = 990 for Trailers
+       //yCord = 190, xCord = 1030 +=20 for Main Street
+       //yCord = 270 +=20, xCord = 940 for Saloon
+       //yCord = 280 +=20, xCord = 210 for General Store
+       //yCord = 270 +=20, xCord = 10 for Train Station
+       //yCord = 210, xCord = 390 +=20 for Jail
+       //yCord = 505 +=20, xCord = 10 for Casting office
+       //yCord = 525 +=20, xCord = 540 for Ranch
+       //yCord = 470 +=20, xCord = 970 for Bank
+       int yCord = 470;
+       int xCord = 970;
+       for(int i = 0;i < 8;i++){
          playerJLabels[i] = new JLabel();
          ImageIcon pIcon = new ImageIcon("img/dice/dice/"+diceStrings[i]+"1"+".png");
          Image scaledPlImage = pIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
          ImageIcon smallpIcon = new ImageIcon(scaledPlImage);
          playerJLabels[i].setIcon(smallpIcon);
-         //playerlabel.setBounds(114,227,pIcon.getIconWidth(),pIcon.getIconHeight());  
-         playerJLabels[i].setBounds(990,yCord,20,20);
+         playerJLabels[i].setBounds(xCord,yCord,20,20);
          yCord += 20;
          playerJLabels[i].setVisible(true);
          bPane.add(playerJLabels[i], Integer.valueOf(3));
@@ -151,7 +159,7 @@ public class BoardLayersListener extends JFrame {
          b.setBackground(Color.white);
          b.addMouseListener(new boardMouseListener());
          b.setFont(new Font("Arial", Font.PLAIN, 20));
-         b.setVisible(false);
+         b.setVisible(true);
          b.setEnabled(false);
       }
       // Add all location buttons to the board, must be done individually since all
@@ -270,6 +278,38 @@ public class BoardLayersListener extends JFrame {
       roleMenu(testPlayer);
       assignRole(testPlayer, rooms[0].getCard().getRoles()[0]);
    }  
+   
+   public void addSceneBacks(Room[] allRooms){
+      for(int i=0; i<allRooms.length; i++){
+         if(allRooms[i].getShots()>0){
+            int x = allRooms[i].getXCorodinates();
+            int y = allRooms[i].getYCorodinates();
+            JLabel cardBack = new JLabel();
+            ImageIcon cIcon =  new ImageIcon("img/CardBack-small.jpg");
+            cardBack.setIcon(cIcon); 
+            cardBack.setBounds(x,y,205,115);
+            cardBack.setOpaque(true);
+            // Add the scene card to the lower level
+            bPane.add(cardlabel, new Integer(1));
+         }
+
+      }
+
+
+   }
+   public void flipSceneCard(Room room){
+      //get the card associated with the room and place it above the card back
+      cardlabel = new JLabel();
+      ImageIcon cIcon =  new ImageIcon("img/cards/cards/"+room.getCard().getImString());
+      cardlabel.setIcon(cIcon); 
+      cardlabel.setBounds(room.getXCorodinates(),room.getYCorodinates(),205,115);
+      cardlabel.setOpaque(true);
+     
+      // Add the scene card to the upper level
+      bPane.add(cardlabel, new Integer(3));
+   }
+
+
   public void enableMovement(String[] movementOptions){
    //enable appropiate movement buttons
    //recives a String[] of the availible locations ot move to
@@ -337,15 +377,7 @@ public class BoardLayersListener extends JFrame {
    playerlabel.setBounds(x,y,46,46);
    bPane.add(playerlabel,Integer.valueOf(3));
   }
-  //playerlabel = new JLabel();
-  //ImageIcon pIcon = new ImageIcon("img/dice/dice/r2.png");
-  //Image scaledPlImage = pIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-  //ImageIcon smallpIcon = new ImageIcon(scaledPlImage);
-  //playerlabel.setIcon(smallpIcon);
-  //playerlabel.setBounds(114,227,pIcon.getIconWidth(),pIcon.getIconHeight());  
-  //playerlabel.setBounds(114,227,20,20);
-  //playerlabel.setVisible(false);
-  //bPane.add(playerlabel,new Integer(3));
+  
 
 
 
