@@ -227,9 +227,19 @@ public class BoardLayersListener extends JFrame {
       }
    }
   }
-  public void scalePlayerDown(Player player){
-   String color = String.valueOf(player.getId());
+  public void scalePlayerDown(Player player, int x, int y){
+   playerJLabels[player.getId()].setVisible(false);
+   String color = diceStrings[player.getId()];
    String rank = String.valueOf(player.getRank());
+   ImageIcon pIcon = new ImageIcon("img/dice/dice/"+color+rank+".png");
+   Image scaledPlImage = pIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+   ImageIcon smallpIcon = new ImageIcon(scaledPlImage);
+   playerJLabels[player.getId()].setIcon(smallpIcon);
+   playerJLabels[player.getId()].setBounds(x,y,20,20);
+   playerJLabels[player.getId()].setVisible(true);
+   bPane.add(playerJLabels[player.getId()],new Integer(3));
+
+
 
   }
   public void scalePlayerUp(Player player, int x, int y){
@@ -290,7 +300,7 @@ public class BoardLayersListener extends JFrame {
          }
       }
   }
-  public void disableMovement(){
+  public void disableMovementButtons(){
    for (int i = 0; i < movementButtons.length;i++){
       movementButtons[i].setVisible(false);
       movementButtons[i].setEnabled(false);
