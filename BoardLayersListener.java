@@ -134,9 +134,9 @@ public class BoardLayersListener extends JFrame {
        //yCord = 505 +=20, xCord = 10 for Casting office
        //yCord = 525 +=20, xCord = 540 for Ranch
        //yCord = 470 +=20, xCord = 970 for Bank
-       int yCord = 470;
-       int xCord = 970;
-       for(int i = 0;i < 8;i++){
+       int yCord = 270;
+       int xCord = 990;
+       for(int i = 0;i < numOfPlayers;i++){
          playerJLabels[i] = new JLabel();
          ImageIcon pIcon = new ImageIcon("img/dice/dice/"+diceStrings[i]+"1"+".png");
          Image scaledPlImage = pIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
@@ -282,8 +282,8 @@ public class BoardLayersListener extends JFrame {
    public void addSceneBacks(Room[] allRooms){
       for(int i=0; i<allRooms.length; i++){
          if(allRooms[i].getShots()>0){
-            int x = allRooms[i].getXCorodinates();
-            int y = allRooms[i].getYCorodinates();
+            int x = allRooms[i].getXCoordinates();
+            int y = allRooms[i].getYCoordinates();
             JLabel cardBack = new JLabel();
             ImageIcon cIcon =  new ImageIcon("img/CardBack-small.jpg");
             cardBack.setIcon(cIcon); 
@@ -302,7 +302,7 @@ public class BoardLayersListener extends JFrame {
       cardlabel = new JLabel();
       ImageIcon cIcon =  new ImageIcon("img/cards/cards/"+room.getCard().getImString());
       cardlabel.setIcon(cIcon); 
-      cardlabel.setBounds(room.getXCorodinates(),room.getYCorodinates(),205,115);
+      cardlabel.setBounds(room.getXCoordinates(),room.getYCoordinates(),205,115);
       cardlabel.setOpaque(true);
      
       // Add the scene card to the upper level
