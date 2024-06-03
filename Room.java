@@ -9,16 +9,16 @@ public class Room {
     protected int h;
     protected int w;
 
-    public int getXCorodinates(){
+    public int getXCoordinates(){
         return this.x;
     }
-    public int getYCorodinates(){
+    public int getYCoordinates(){
         return this.y;
     }
-    public int getHCorodinates(){
+    public int getHCoordinates(){
         return this.h;
     }
-    public int getWCorodinates(){
+    public int getWCoordinates(){
         return this.w;
     }
 

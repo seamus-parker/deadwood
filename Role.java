@@ -48,6 +48,10 @@ public class Role {
         this.taken = b;
     }
 
+    public int[] getCoords() {
+        return new int[] {this.x, this.y};
+    }
+
     public void print() {
         System.out.println("name: " + this.name);
         System.out.println("level: " + Integer.toString(this.level));

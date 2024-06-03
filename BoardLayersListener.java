@@ -32,6 +32,7 @@ public class BoardLayersListener extends JFrame {
    JButton bUpgrade = new JButton("UPGRADE");
    JButton bEndTurn = new JButton("END TURN");
    JButton bEndGame = new JButton("END GAME");
+   JButton bCancel = new JButton("CANCEL");
    JButton[] actionButtons = { bMove, bTakeRole, bAct, bRehearse, bUpgrade, bEndTurn, bEndGame };
 
    // movement buttons
@@ -49,6 +50,10 @@ public class BoardLayersListener extends JFrame {
    JButton bHotel = new JButton("Hotel");
    JButton[] movementButtons = { bTrailers, bMainSteet, bSaloon, bGeneralStore, bTrainStation, bJail, bCastingOffice,
          bRanch, bSecretHideout, bChurch, bBank, bHotel };
+
+   // role buttons
+   JButton[] roleButtons = {new JButton(), new JButton(), new JButton(), new JButton(), 
+                            new JButton(), new JButton(), new JButton()};
 
    // shot counters
    JLabel[] mainStreetShots = {new JLabel(),new JLabel(),new JLabel()};
@@ -101,10 +106,10 @@ public class BoardLayersListener extends JFrame {
        boardlabel.setBounds(0,0,icon.getIconWidth(),icon.getIconHeight());
       
        // Add the board to the lowest layer
-       bPane.add(boardlabel, new Integer(0));
+       bPane.add(boardlabel, Integer.valueOf(0));
       
        // Set the size of the GUI
-       setSize(icon.getIconWidth()+200,icon.getIconHeight());
+       setSize(icon.getIconWidth()+300,icon.getIconHeight()+75);
        
        // Add a scene card to this room
        cardlabel = new JLabel();
@@ -114,7 +119,7 @@ public class BoardLayersListener extends JFrame {
        cardlabel.setOpaque(true);
       
        // Add the card to the lower layer
-       bPane.add(cardlabel, new Integer(1));
+       bPane.add(cardlabel, Integer.valueOf(1));
        
       
 
@@ -132,14 +137,14 @@ public class BoardLayersListener extends JFrame {
          playerJLabels[i].setBounds(990,yCord,20,20);
          yCord += 20;
          playerJLabels[i].setVisible(true);
-         bPane.add(playerJLabels[i],new Integer(3));
+         bPane.add(playerJLabels[i], Integer.valueOf(3));
          
        }
       
        // Create the Menu for action buttons
        mLabel = new JLabel("MENU");
        mLabel.setBounds(icon.getIconWidth()+40,0,100,20);
-       bPane.add(mLabel,new Integer(2));
+       bPane.add(mLabel, Integer.valueOf(2));
 
       // add movement buttons to the board
       for (JButton b : movementButtons) {
@@ -152,53 +157,66 @@ public class BoardLayersListener extends JFrame {
       // Add all location buttons to the board, must be done individually since all
       // have unique locations
       bMainSteet.setBounds(icon.getIconWidth() - 220, 150, 200, 40);
-      bPane.add(bMainSteet, new Integer(2));
+      bPane.add(bMainSteet, Integer.valueOf(2));
 
       bTrailers.setBounds(icon.getIconWidth() - 165, 280, 120, 27);
-      bPane.add(bTrailers, new Integer(2));
+      bPane.add(bTrailers, Integer.valueOf(2));
 
       bSaloon.setBounds(icon.getIconWidth() - 520, 405, 100, 30);
-      bPane.add(bSaloon, new Integer(2));
+      bPane.add(bSaloon, Integer.valueOf(2));
 
       bBank.setBounds(icon.getIconWidth() - 520, 597, 100, 35);
-      bPane.add(bBank, new Integer(2));
+      bPane.add(bBank, Integer.valueOf(2));
 
       bJail.setBounds(345, 150, 75, 30);
-      bPane.add(bJail, new Integer(2));
+      bPane.add(bJail, Integer.valueOf(2));
 
       bGeneralStore.setBounds(375, 405, 200, 30);
-      bPane.add(bGeneralStore, new Integer(2));
+      bPane.add(bGeneralStore, Integer.valueOf(2));
 
       bTrainStation.setBounds(30, 190, 200, 30);
-      bPane.add(bTrainStation, new Integer(2));
+      bPane.add(bTrainStation, Integer.valueOf(2));
 
       bCastingOffice.setBounds(22, 470, 190, 35);
-      bPane.add(bCastingOffice, new Integer(2));
+      bPane.add(bCastingOffice, Integer.valueOf(2));
 
       bRanch.setBounds(280, 600, 100, 40);
-      bPane.add(bRanch, new Integer(2));
+      bPane.add(bRanch, Integer.valueOf(2));
 
       bSecretHideout.setBounds(20, 850, 210, 40);
-      bPane.add(bSecretHideout, new Integer(2));
+      bPane.add(bSecretHideout, Integer.valueOf(2));
 
       bChurch.setBounds(icon.getIconWidth() - 525, 855, 100, 35);
-      bPane.add(bChurch, new Integer(2));
+      bPane.add(bChurch, Integer.valueOf(2));
 
       bHotel.setBounds(icon.getIconWidth() - 190, 862, 100, 30);
-      bPane.add(bHotel, new Integer(2));
+      bPane.add(bHotel, Integer.valueOf(2));
       
-
       // Create Action buttons
 
       int yLoc = 30;
-
       for (JButton b : actionButtons) {
          b.setBackground(Color.white);
          b.setBounds(icon.getIconWidth() + 10, yLoc, 100, 20);
          b.addMouseListener(new boardMouseListener());
          b.setVisible(false);
-         bPane.add(b, new Integer(2));
+         bPane.add(b, Integer.valueOf(2));
          yLoc += 30;
+      }
+      bCancel.setBackground(Color.white);
+      bCancel.setBounds(0, 0, 100, 20);
+      bCancel.addMouseListener(new boardMouseListener());
+      bCancel.setVisible(false);
+      bPane.add(bCancel, Integer.valueOf(2));
+
+      yLoc = 30;
+      for (JButton b : roleButtons) {
+         b.setBackground(Color.white);
+         b.setBounds(icon.getIconWidth() + 10, yLoc, 225, 20);
+         b.addMouseListener(new boardMouseListener());
+         b.setVisible(false);
+         bPane.add(b, Integer.valueOf(2));
+         yLoc += 30;      
       }
 
       // Create player info display
@@ -237,19 +255,20 @@ public class BoardLayersListener extends JFrame {
       }
 
       // test actionMenu
-
       ArrayList<String> a = new ArrayList<>();
       a.add("work");
       a.add("move");
       actionMenu(a);
-
+      clearActionMenu();
       // test player info
       Player testPlayer = new Player("Seamus", 0, rooms[0]);
       testPlayer.addCredits(3);
       testPlayer.addDollars(12);
       testPlayer.upgradeRank(4);
-      testPlayer.setLocation(rooms[3]);
+      testPlayer.setLocation(rooms[1]);
       playerInfo(testPlayer);
+      roleMenu(testPlayer);
+      assignRole(testPlayer, rooms[0].getCard().getRoles()[0]);
    }  
   public void enableMovement(String[] movementOptions){
    //enable appropiate movement buttons
@@ -306,17 +325,17 @@ public class BoardLayersListener extends JFrame {
    playerJLabels[player.getId()].setIcon(smallpIcon);
    playerJLabels[player.getId()].setBounds(x,y,20,20);
    playerJLabels[player.getId()].setVisible(true);
-   bPane.add(playerJLabels[player.getId()],new Integer(3));
+   bPane.add(playerJLabels[player.getId()],Integer.valueOf(3));
 
 
 
   }
   public void scalePlayerUp(Player player, int x, int y){
-   playerlabel = new JLabel();
+   playerlabel = playerJLabels[player.getId()];
    ImageIcon pIcon = new ImageIcon("img/dice/dice/"+diceStrings[player.getId()]+String.valueOf(player.getRank())+".png");
    playerlabel.setIcon(pIcon);  
    playerlabel.setBounds(x,y,46,46);
-   bPane.add(playerlabel,new Integer(3));
+   bPane.add(playerlabel,Integer.valueOf(3));
   }
   //playerlabel = new JLabel();
   //ImageIcon pIcon = new ImageIcon("img/dice/dice/r2.png");
@@ -355,7 +374,7 @@ public class BoardLayersListener extends JFrame {
    public void actionMenu(ArrayList<String> possibleActions) {
       for (JButton b : actionButtons) {
          b.setVisible(true);
-         b.setEnabled(true);
+         b.setEnabled(false);
       }
       bEndGame.setEnabled(true);
       bEndTurn.setEnabled(true);
@@ -373,6 +392,11 @@ public class BoardLayersListener extends JFrame {
          }
       }
   }
+  public void clearActionMenu() {
+     for (JButton b : actionButtons) {
+        b.setVisible(false);
+     }
+  }
   public void disableMovementButtons(){
    for (int i = 0; i < movementButtons.length;i++){
       movementButtons[i].setVisible(false);
@@ -380,9 +404,36 @@ public class BoardLayersListener extends JFrame {
    }
   }
 
-   // display possible moves
-
    // display possible roles
+
+   public void roleMenu(Player p) {
+      ArrayList<Role> possibleRoles = p.getPossibleRoles();
+      for (int i = 0; i < possibleRoles.size(); i++) {
+         Role r = possibleRoles.get(i);
+         roleButtons[i].setText(r.getName());
+         roleButtons[i].setVisible(true);
+      }
+      bCancel.setBounds(1210, (possibleRoles.size() * 30) + 30, 225, 20);
+      bCancel.setVisible(true);
+   }
+
+   public void clearRoleMenu() {
+      for (JButton b : roleButtons) {
+         b.setVisible(false);
+      }
+      bCancel.setVisible(false);
+   }
+
+   // add player to role (Role, Room location, boolean onCard)
+
+   public void assignRole(Player p, Role r) {
+      int[] coords = r.getCoords();
+      if (r.isOnCard()) {
+         coords[0] += p.getLocation().getXCoordinates();
+         coords[1] += p.getLocation().getYCoordinates();
+      }
+      scalePlayerUp(p, coords[0], coords[1]);
+   }
 
    // move player dice (Player player, Room location)
 
@@ -437,8 +488,6 @@ public class BoardLayersListener extends JFrame {
       return shots[0];
    }
 
-   // add player to role (Role, Room location, boolean onCard)
-
    // This class implements Mouse Events
 
    class boardMouseListener implements MouseListener {
@@ -484,6 +533,7 @@ public class BoardLayersListener extends JFrame {
             rooms, scenes, upgrades);
       Random rnd = new Random();
       b.setActivePlayer(rnd.nextInt(numPlayers));
+      b.resetSceneCards();
       boolean gameEnded = false;
       BoardLayersListener board = new BoardLayersListener(numPlayers, rooms);
       board.setVisible(true);
