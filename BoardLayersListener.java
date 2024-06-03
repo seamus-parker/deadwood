@@ -13,6 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.imageio.ImageIO;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.awt.Image.*;
 import java.util.Random;
 
 public class BoardLayersListener extends JFrame {
@@ -49,80 +50,71 @@ public class BoardLayersListener extends JFrame {
    JButton[] movementButtons = { bTrailers, bMainSteet, bSaloon, bGeneralStore, bTrainStation, bJail, bCastingOffice,
          bRanch, bSecretHideout, bChurch, bBank, bHotel };
 
-   // shot counters
-   JLabel[] mainStreetShots = {new JLabel(),new JLabel(),new JLabel()};
-   JLabel[] saloonShots = {new JLabel(),new JLabel()};
-   JLabel[] bankShots = {new JLabel()};
-   JLabel[] churchShots = {new JLabel(),new JLabel()};
-   JLabel[] hotelShots = {new JLabel(),new JLabel(),new JLabel()};
-   JLabel[] ranchShots = {new JLabel(),new JLabel()};
-   JLabel[] secretHideoutShots = {new JLabel(),new JLabel(),new JLabel()};
-   JLabel[] generalStoreShots = {new JLabel(),new JLabel()};
-   JLabel[] jailShots = {new JLabel()};
-   JLabel[] trainStationShots = {new JLabel(),new JLabel(),new JLabel()};
-   JLabel[][] shots = {trainStationShots,secretHideoutShots,churchShots,
-                       hotelShots,mainStreetShots,jailShots,generalStoreShots,
-                       ranchShots,bankShots, saloonShots};
 
-   // Player info labels
-   JLabel currentPlayerLabel = new JLabel("Current player:");
-   JLabel playerNameLabel = new JLabel();
-   JLabel playerMoneyLabel = new JLabel();
-   JLabel playerCreditsLabel = new JLabel();
-   JLabel playerLocationLabel = new JLabel();
-   JLabel playerRankLabel = new JLabel();
-   // JLayered Pane
-   JLayeredPane bPane;
+  // JLayered Pane
+  JLayeredPane bPane;
 
-   // Constructor
+  //String array for dice
+  String[] diceStrings = {"b","r","g","o","p","c","v","y","w"};
+  
+  // Constructor
+  
+  public BoardLayersListener(int numOfPlayers) {
+      
+       // Set the title of the JFrame
+       super("Deadwood");
+       // Set the exit option for the JFrame
+       setDefaultCloseOperation(EXIT_ON_CLOSE);
+      
+       // Create the JLayeredPane to hold the display, cards, dice and buttons
+       bPane = getLayeredPane();
+    
+       // Create the deadwood board
+       boardlabel = new JLabel();
+       ImageIcon icon =  new ImageIcon("img/board.jpg");
+       boardlabel.setIcon(icon); 
+       boardlabel.setBounds(0,0,icon.getIconWidth(),icon.getIconHeight());
+      
+       // Add the board to the lowest layer
+       bPane.add(boardlabel, new Integer(0));
+      
+       // Set the size of the GUI
+       setSize(icon.getIconWidth()+200,icon.getIconHeight());
+       
+       // Add a scene card to this room
+       cardlabel = new JLabel();
+       ImageIcon cIcon =  new ImageIcon("img/cards/cards/01.png");
+       cardlabel.setIcon(cIcon); 
+       cardlabel.setBounds(969,28,205,115);
+       cardlabel.setOpaque(true);
+      
+       // Add the card to the lower layer
+       bPane.add(cardlabel, new Integer(1));
+       
+      
 
-   public BoardLayersListener(Room[] rooms) {
-
-      // Set the title of the JFrame
-      super("Deadwood");
-      // Set the exit option for the JFrame
-      setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-      // Create the JLayeredPane to hold the display, cards, dice and buttons
-      bPane = getLayeredPane();
-
-      // Create the deadwood board
-      boardlabel = new JLabel();
-      ImageIcon icon = new ImageIcon("img/board.jpg");
-      boardlabel.setIcon(icon);
-      boardlabel.setBounds(0, 0, icon.getIconWidth(), icon.getIconHeight());
-
-      // Add the board to the lowest layer
-      bPane.add(boardlabel, new Integer(0));
-
-      // Set the size of the GUI
-      setSize(icon.getIconWidth() + 200, icon.getIconHeight());
-
-      // Add a scene card to this room
-      cardlabel = new JLabel();
-      ImageIcon cIcon = new ImageIcon("img/cards/cards/01.png");
-      cardlabel.setIcon(cIcon);
-      cardlabel.setBounds(21, 69, 205, 115);
-      cardlabel.setOpaque(true);
-
-      // Add the card to the lower layer
-      bPane.add(cardlabel, new Integer(1));
-
-      // Add a dice to represent a player.
-      // Role for Crusty the prospector. The x and y co-ordiantes are taken from
-      // Board.xml file
-      playerlabel = new JLabel();
-      ImageIcon pIcon = new ImageIcon("img/dice/dice/r2.png");
-      playerlabel.setIcon(pIcon);
-      // playerlabel.setBounds(114,227,pIcon.getIconWidth(),pIcon.getIconHeight());
-      playerlabel.setBounds(114, 227, 46, 46);
-      playerlabel.setVisible(false);
-      bPane.add(playerlabel, new Integer(3));
-
-      // Create the Menu for action buttons
-      mLabel = new JLabel("MENU");
-      mLabel.setBounds(icon.getIconWidth() + 40, 0, 100, 20);
-      bPane.add(mLabel, new Integer(2));
+    
+       // Add a dice to represent a player. 
+       // Role for Crusty the prospector. The x and y co-ordiantes are taken from Board.xml file
+       int yCord = 270;
+       for(int i = 0;i < numOfPlayers;i++){
+         playerJLabels[i] = new JLabel();
+         ImageIcon pIcon = new ImageIcon("img/dice/dice/"+diceStrings[i]+"1"+".png");
+         Image scaledPlImage = pIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+         ImageIcon smallpIcon = new ImageIcon(scaledPlImage);
+         playerJLabels[i].setIcon(smallpIcon);
+         //playerlabel.setBounds(114,227,pIcon.getIconWidth(),pIcon.getIconHeight());  
+         playerJLabels[i].setBounds(990,yCord,20,20);
+         yCord += 20;
+         playerJLabels[i].setVisible(true);
+         bPane.add(playerJLabels[i],new Integer(3));
+         
+       }
+      
+       // Create the Menu for action buttons
+       mLabel = new JLabel("MENU");
+       mLabel.setBounds(icon.getIconWidth()+40,0,100,20);
+       bPane.add(mLabel,new Integer(2));
 
       // add movement buttons to the board
       for (JButton b : movementButtons) {
@@ -169,6 +161,7 @@ public class BoardLayersListener extends JFrame {
 
       bHotel.setBounds(icon.getIconWidth() - 190, 862, 100, 30);
       bPane.add(bHotel, new Integer(2));
+      
 
       // Create Action buttons
 
@@ -233,6 +226,79 @@ public class BoardLayersListener extends JFrame {
       testPlayer.setLocation(rooms[3]);
       playerInfo(testPlayer);
    }  
+  public void enableMovement(String[] movementOptions){
+   //enable appropiate movement buttons
+   //recives a String[] of the availible locations ot move to
+   //loop checks wich locations are availible to be moved too and enables the 
+   //appropriate buttons.
+   for (int i =0; i< movementOptions.length;i++){
+      if (movementOptions[i] == "Trailers"){
+         bTrailers.setVisible(true);
+         bTrailers.setEnabled(true);
+      }else if (movementOptions[i]=="Casting Office"){
+         bCastingOffice.setVisible(true);
+         bCastingOffice.setEnabled(true);
+      }else if (movementOptions[i]=="Main Street"){
+         bMainSteet.setVisible(true);
+         bMainSteet.setEnabled(true);
+      }else if (movementOptions[i]=="Saloon"){
+         bSaloon.setVisible(true);
+         bSaloon.setEnabled(true);
+      }else if (movementOptions[i]=="Ranch"){
+         bRanch.setVisible(true);
+         bRanch.setEnabled(true);
+      }else if (movementOptions[i]=="Secret Hideout"){
+         bSecretHideout.setVisible(true);
+         bSecretHideout.setEnabled(true);
+      }else if (movementOptions[i]=="Bank"){
+         bBank.setVisible(true);
+         bBank.setEnabled(true);
+      }else if (movementOptions[i]=="Church"){
+         bChurch.setVisible(true);
+         bChurch.setEnabled(true);
+      }else if (movementOptions[i]=="Hotel"){
+         bHotel.setVisible(true);
+         bHotel.setEnabled(true);
+      }else if (movementOptions[i]=="Train Station"){
+         bTrainStation.setVisible(true);
+         bTrainStation.setEnabled(true);
+      }else if (movementOptions[i]=="Jail"){
+         bJail.setVisible(true);
+         bJail.setEnabled(true);
+      }else if (movementOptions[i]=="General Store"){
+         bGeneralStore.setVisible(true);
+         bGeneralStore.setEnabled(true);
+      }
+   }
+  }
+  public void scalePlayerDown(Player player){
+   String color = String.valueOf(player.getId());
+   String rank = String.valueOf(player.getRank());
+
+  }
+  public void scalePlayerUp(Player player, int x, int y){
+   playerlabel = new JLabel();
+   ImageIcon pIcon = new ImageIcon("img/dice/dice/"+diceStrings[player.getId()]+String.valueOf(player.getRank())+".png");
+   playerlabel.setIcon(pIcon);  
+   playerlabel.setBounds(x,y,46,46);
+   bPane.add(playerlabel,new Integer(3));
+  }
+  //playerlabel = new JLabel();
+  //ImageIcon pIcon = new ImageIcon("img/dice/dice/r2.png");
+  //Image scaledPlImage = pIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+  //ImageIcon smallpIcon = new ImageIcon(scaledPlImage);
+  //playerlabel.setIcon(smallpIcon);
+  //playerlabel.setBounds(114,227,pIcon.getIconWidth(),pIcon.getIconHeight());  
+  //playerlabel.setBounds(114,227,20,20);
+  //playerlabel.setVisible(false);
+  //bPane.add(playerlabel,new Integer(3));
+
+
+
+
+
+
+
 
    // TODO: implement functions
 
@@ -254,7 +320,7 @@ public class BoardLayersListener extends JFrame {
    public void actionMenu(ArrayList<String> possibleActions) {
       for (JButton b : actionButtons) {
          b.setVisible(true);
-         b.setEnabled(false);
+         b.setEnabled(true);
       }
       bEndGame.setEnabled(true);
       bEndTurn.setEnabled(true);
@@ -271,7 +337,13 @@ public class BoardLayersListener extends JFrame {
             bUpgrade.setEnabled(true);
          }
       }
+  }
+  public void disableMovement(){
+   for (int i = 0; i < movementButtons.length;i++){
+      movementButtons[i].setVisible(false);
+      movementButtons[i].setEnabled(false);
    }
+  }
 
    // display possible moves
 
@@ -344,53 +416,9 @@ public class BoardLayersListener extends JFrame {
             System.out.println("Acting is Selected\n");
          } else if (e.getSource() == bRehearse) {
             System.out.println("Rehearse is Selected\n");
-         } else if (e.getSource() == bMove) {
-            // enable appropiate movement buttons
-            String[] movementOptions = new String[2];
-            // movementoptions is a placeholder, should call get possible moves
-            // on the active player and copy the returned String[] to movementOptions
-            // loop checks wich locations are availible to be moved too and enables the
-            // appropriate buttons.
-            for (int i = 0; i < movementOptions.length; i++) {
-               if (movementOptions[0] == "Trailers") {
-                  bTrailers.setVisible(true);
-                  bTrailers.setEnabled(true);
-               } else if (movementOptions[i] == "Casting Office") {
-                  bCastingOffice.setVisible(true);
-                  bCastingOffice.setEnabled(true);
-               } else if (movementOptions[i] == "Main Street") {
-                  bMainSteet.setVisible(true);
-                  bMainSteet.setEnabled(true);
-               } else if (movementOptions[i] == "Saloon") {
-                  bSaloon.setVisible(true);
-                  bSaloon.setEnabled(true);
-               } else if (movementOptions[i] == "Ranch") {
-                  bRanch.setVisible(true);
-                  bRanch.setEnabled(true);
-               } else if (movementOptions[i] == "Secret Hideout") {
-                  bSecretHideout.setVisible(true);
-                  bSecretHideout.setEnabled(true);
-               } else if (movementOptions[i] == "Bank") {
-                  bBank.setVisible(true);
-                  bBank.setEnabled(true);
-               } else if (movementOptions[i] == "Church") {
-                  bChurch.setVisible(true);
-                  bChurch.setEnabled(true);
-               } else if (movementOptions[i] == "Hotel") {
-                  bHotel.setVisible(true);
-                  bHotel.setEnabled(true);
-               } else if (movementOptions[i] == "Train Station") {
-                  bTrainStation.setVisible(true);
-                  bTrainStation.setEnabled(true);
-               } else if (movementOptions[i] == "Jail") {
-                  bJail.setVisible(true);
-                  bJail.setEnabled(true);
-               } else if (movementOptions[i] == "General Store") {
-                  bGeneralStore.setVisible(true);
-                  bGeneralStore.setEnabled(true);
-               }
-
-            }
+         }
+         else if (e.getSource()== bMove){
+            
 
             System.out.println("Move is Selected\n");
          }
