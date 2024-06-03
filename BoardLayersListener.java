@@ -50,6 +50,31 @@ public class BoardLayersListener extends JFrame {
    JButton[] movementButtons = { bTrailers, bMainSteet, bSaloon, bGeneralStore, bTrainStation, bJail, bCastingOffice,
          bRanch, bSecretHideout, bChurch, bBank, bHotel };
 
+   // shot counters
+   JLabel[] mainStreetShots = {new JLabel(),new JLabel(),new JLabel()};
+   JLabel[] saloonShots = {new JLabel(),new JLabel()};
+   JLabel[] bankShots = {new JLabel()};
+   JLabel[] churchShots = {new JLabel(),new JLabel()};
+   JLabel[] hotelShots = {new JLabel(),new JLabel(),new JLabel()};
+   JLabel[] ranchShots = {new JLabel(),new JLabel()};
+   JLabel[] secretHideoutShots = {new JLabel(),new JLabel(),new JLabel()};
+   JLabel[] generalStoreShots = {new JLabel(),new JLabel()};
+   JLabel[] jailShots = {new JLabel()};
+   JLabel[] trainStationShots = {new JLabel(),new JLabel(),new JLabel()};
+   JLabel[][] shots = {trainStationShots,secretHideoutShots,churchShots,
+                       hotelShots,mainStreetShots,jailShots,generalStoreShots,
+                       ranchShots,bankShots, saloonShots};
+
+   // Player info labels
+   JLabel currentPlayerLabel = new JLabel("Current player:");
+   JLabel playerNameLabel = new JLabel();
+   JLabel playerMoneyLabel = new JLabel();
+   JLabel playerCreditsLabel = new JLabel();
+   JLabel playerLocationLabel = new JLabel();
+   JLabel playerRankLabel = new JLabel();
+
+   // Player dice labels
+   JLabel[] playerJLabels = new JLabel[8];
 
   // JLayered Pane
   JLayeredPane bPane;
@@ -59,7 +84,7 @@ public class BoardLayersListener extends JFrame {
   
   // Constructor
   
-  public BoardLayersListener(int numOfPlayers) {
+  public BoardLayersListener(int numOfPlayers, Room[] rooms) {
       
        // Set the title of the JFrame
        super("Deadwood");
@@ -450,7 +475,7 @@ public class BoardLayersListener extends JFrame {
       Random rnd = new Random();
       b.setActivePlayer(rnd.nextInt(numPlayers));
       boolean gameEnded = false;
-      BoardLayersListener board = new BoardLayersListener(rooms);
+      BoardLayersListener board = new BoardLayersListener(numPlayers, rooms);
       board.setVisible(true);
 
       // Take input from the user about number of players
