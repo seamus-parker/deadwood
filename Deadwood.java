@@ -9,6 +9,10 @@ public class Deadwood {
         Board b = new Board(v.getPlayerNames(numPlayers), numPlayers, 
         parser.readRoomData("board.xml"), parser.readSceneData("cards.xml"), parser.getUpgradeData("board.xml"));
         Random rnd = new Random();
+
+        b.getPlayers()[0].addCredits(100);
+        b.getPlayers()[0].addDollars(100);
+
         b.setActivePlayer(rnd.nextInt(numPlayers));
         boolean gameEnded = false;
         while (b.getDays() > 0) {
