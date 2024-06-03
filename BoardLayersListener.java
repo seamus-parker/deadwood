@@ -55,6 +55,10 @@ public class BoardLayersListener extends JFrame {
    JButton[] roleButtons = {new JButton(), new JButton(), new JButton(), new JButton(), 
                             new JButton(), new JButton(), new JButton()};
 
+   // upgrade buttons
+   JButton[] upgradeButtons = {new JButton(), new JButton(), new JButton(), new JButton(), new JButton(), 
+                               new JButton(), new JButton(), new JButton(), new JButton(), new JButton()};
+
    // shot counters
    JLabel[] mainStreetShots = {new JLabel(),new JLabel(),new JLabel()};
    JLabel[] saloonShots = {new JLabel(),new JLabel()};
@@ -77,6 +81,7 @@ public class BoardLayersListener extends JFrame {
    JLabel playerCreditsLabel = new JLabel();
    JLabel playerLocationLabel = new JLabel();
    JLabel playerRankLabel = new JLabel();
+   JLabel playerPracticeChipsLabel = new JLabel();
 
    // Player dice labels
    JLabel[] playerJLabels = new JLabel[8];
@@ -227,19 +232,39 @@ public class BoardLayersListener extends JFrame {
          yLoc += 30;      
       }
 
+      // create upgrade buttons
+      int[][] upgradeCosts = {{4,10,18,28,40},{5,10,15,20,25}};
+      String currency = "dollars";
+      for (int i = 0; i < upgradeCosts.length; i++) {
+         for (int j = 0; j < upgradeCosts[0].length; j++) {
+            JButton b = upgradeButtons[(i*5)+j];
+            b.setBackground(Color.white);
+            b.setBounds(0, 0, 225, 20);
+            b.setText("Rank " + Integer.toString(j+2) + " (" +
+                      upgradeCosts[i][j] + " " + currency + ")");
+            b.addMouseListener(new boardMouseListener());
+            b.setVisible(false);
+            bPane.add(b, Integer.valueOf(2));
+         }
+         currency = "credits";
+      }
+
       // Create player info display
-      currentPlayerLabel.setBounds(icon.getIconWidth() + 10, 240, 100, 20);
-      playerNameLabel.setBounds(icon.getIconWidth() + 105, 240, 100, 20);
-      playerMoneyLabel.setBounds(icon.getIconWidth() + 10, 260, 100, 20);
-      playerCreditsLabel.setBounds(icon.getIconWidth() + 10, 280, 100, 20);
-      playerLocationLabel.setBounds(icon.getIconWidth() + 10, 300, 200, 20);
-      playerRankLabel.setBounds(icon.getIconWidth() + 10, 320, 100, 20);
+      currentPlayerLabel.setBounds(icon.getIconWidth() + 10, 340, 100, 20);
+      playerNameLabel.setBounds(icon.getIconWidth() + 105, 340, 100, 20);
+      playerMoneyLabel.setBounds(icon.getIconWidth() + 10, 360, 100, 20);
+      playerCreditsLabel.setBounds(icon.getIconWidth() + 10, 380, 100, 20);
+      playerLocationLabel.setBounds(icon.getIconWidth() + 10, 400, 200, 20);
+      playerRankLabel.setBounds(icon.getIconWidth() + 10, 420, 100, 20);
+      playerPracticeChipsLabel.setBounds(icon.getIconWidth() + 10, 440, 100, 20);
+
       bPane.add(currentPlayerLabel, Integer.valueOf(2));
       bPane.add(playerNameLabel, Integer.valueOf(2));
       bPane.add(playerMoneyLabel, Integer.valueOf(2));
       bPane.add(playerCreditsLabel, Integer.valueOf(2));
       bPane.add(playerLocationLabel, Integer.valueOf(2));
       bPane.add(playerRankLabel, Integer.valueOf(2));
+      bPane.add(playerPracticeChipsLabel, Integer.valueOf(2));
       
       // Create shot counters
       int curRoom = 0;
@@ -270,13 +295,14 @@ public class BoardLayersListener extends JFrame {
       clearActionMenu();
       // test player info
       Player testPlayer = new Player("Seamus", 0, rooms[0]);
-      testPlayer.addCredits(3);
+      testPlayer.addCredits(6);
       testPlayer.addDollars(12);
       testPlayer.upgradeRank(4);
-      testPlayer.setLocation(rooms[1]);
+      testPlayer.setLocation(rooms[0]);
       playerInfo(testPlayer);
-      roleMenu(testPlayer);
+      // roleMenu(testPlayer);
       assignRole(testPlayer, rooms[0].getCard().getRoles()[0]);
+      flipSceneCard(rooms[0]);
    }  
    
    public void addSceneBacks(Room[] allRooms){
@@ -306,7 +332,7 @@ public class BoardLayersListener extends JFrame {
       cardlabel.setOpaque(true);
      
       // Add the scene card to the upper level
-      bPane.add(cardlabel, Integer.valueOf(3));
+      bPane.add(cardlabel, Integer.valueOf(2));
    }
 
 
@@ -467,6 +493,26 @@ public class BoardLayersListener extends JFrame {
       scalePlayerUp(p, coords[0], coords[1]);
    }
 
+   // upgrade menu
+
+   public void upgradeMenu(Player p, int[][] upgrades) {
+      int yLoc = 30;
+      for (int i = 0; i < 5; i++) {
+         if (p.canAffordUpgrade(i+2, upgrades, 0)) {
+            upgradeButtons[i].setLocation(1210, yLoc);
+            upgradeButtons[i].setVisible(true);
+            yLoc += 30;
+         }
+         if (p.canAffordUpgrade(i+2, upgrades, 1)) {
+            upgradeButtons[i+5].setLocation(1210, yLoc);
+            upgradeButtons[i+5].setVisible(true);
+            yLoc += 30;
+         }
+      }
+      bCancel.setBounds(1210, yLoc, 225, 20);
+      bCancel.setVisible(true);
+   }
+
    // move player dice (Player player, Room location)
 
    // change player rank (Player player, int rank)
@@ -522,6 +568,14 @@ public class BoardLayersListener extends JFrame {
 
    // This class implements Mouse Events
 
+   //getIdleCoordinates(Room r)
+   //scalePlayerDown(Player p, Room r)
+   //moveDie(Player p, Room r)
+   //removeScene(Room r)
+   //resetPlayerLocations(int numPlayers)
+
+
+
    class boardMouseListener implements MouseListener {
 
       // Code for the different button clicks
@@ -573,5 +627,11 @@ public class BoardLayersListener extends JFrame {
       // Take input from the user about number of players
       JOptionPane.showInputDialog(board, "How many players?");
       ArrayList<String> testArray = new ArrayList<String>();
+      Player testPlayer = new Player("Seamus", 0, rooms[0]);
+      testPlayer.addCredits(30);
+      testPlayer.addDollars(30);
+      testPlayer.upgradeRank(0);
+      testPlayer.setLocation(rooms[0]);
+      board.upgradeMenu(testPlayer, upgrades);
    }
 }
