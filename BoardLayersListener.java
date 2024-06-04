@@ -18,11 +18,16 @@ import java.util.Random;
 
 public class BoardLayersListener extends JFrame {
 
+   private static BoardLayersListener board;
+   private static Board b;
    // JLabels
    JLabel boardlabel;
    JLabel cardlabel;
    JLabel playerlabel;
    JLabel mLabel;
+
+   // event info display
+   JLabel eventInfoDisplay = new JLabel();
 
    // Action buttons
    JButton bAct = new JButton("ACT");
@@ -94,6 +99,8 @@ public class BoardLayersListener extends JFrame {
   
   // Constructor
   
+  public BoardLayersListener() {}
+
   public BoardLayersListener(int numOfPlayers, Room[] rooms) {
       
        // Set the title of the JFrame
@@ -164,7 +171,7 @@ public class BoardLayersListener extends JFrame {
          b.setBackground(Color.white);
          b.addMouseListener(new boardMouseListener());
          b.setFont(new Font("Arial", Font.PLAIN, 20));
-         b.setVisible(true);
+         b.setVisible(false);
          b.setEnabled(false);
       }
       // Add all location buttons to the board, must be done individually since all
@@ -250,13 +257,13 @@ public class BoardLayersListener extends JFrame {
       }
 
       // Create player info display
-      currentPlayerLabel.setBounds(icon.getIconWidth() + 10, 340, 100, 20);
-      playerNameLabel.setBounds(icon.getIconWidth() + 105, 340, 100, 20);
-      playerMoneyLabel.setBounds(icon.getIconWidth() + 10, 360, 100, 20);
-      playerCreditsLabel.setBounds(icon.getIconWidth() + 10, 380, 100, 20);
-      playerLocationLabel.setBounds(icon.getIconWidth() + 10, 400, 200, 20);
-      playerRankLabel.setBounds(icon.getIconWidth() + 10, 420, 100, 20);
-      playerPracticeChipsLabel.setBounds(icon.getIconWidth() + 10, 440, 100, 20);
+      currentPlayerLabel.setBounds(icon.getIconWidth() + 10, 420, 100, 20);
+      playerNameLabel.setBounds(icon.getIconWidth() + 97, 420, 100, 20);
+      playerMoneyLabel.setBounds(icon.getIconWidth() + 10, 440, 100, 20);
+      playerCreditsLabel.setBounds(icon.getIconWidth() + 10, 460, 100, 20);
+      playerLocationLabel.setBounds(icon.getIconWidth() + 10, 480, 200, 20);
+      playerRankLabel.setBounds(icon.getIconWidth() + 10, 500, 100, 20);
+      playerPracticeChipsLabel.setBounds(icon.getIconWidth() + 10, 520, 200, 20);
 
       bPane.add(currentPlayerLabel, Integer.valueOf(2));
       bPane.add(playerNameLabel, Integer.valueOf(2));
@@ -266,6 +273,11 @@ public class BoardLayersListener extends JFrame {
       bPane.add(playerRankLabel, Integer.valueOf(2));
       bPane.add(playerPracticeChipsLabel, Integer.valueOf(2));
       
+      // create event info display
+      eventInfoDisplay.setBounds(icon.getIconWidth()+10, 550, 200, 200);
+      eventInfoDisplay.setText("<html>This is<br>a multi-line string");
+      bPane.add(eventInfoDisplay, Integer.valueOf(2));
+
       // Create shot counters
       int curRoom = 0;
       int shotXLoc = 0;
@@ -288,21 +300,21 @@ public class BoardLayersListener extends JFrame {
       }
 
       // test actionMenu
-      ArrayList<String> a = new ArrayList<>();
-      a.add("work");
-      a.add("move");
-      actionMenu(a);
-      clearActionMenu();
+      // ArrayList<String> a = new ArrayList<>();
+      // a.add("work");
+      // a.add("move");
+      // actionMenu(a);
+      // clearActionMenu();
       // test player info
-      Player testPlayer = new Player("Seamus", 0, rooms[0]);
-      testPlayer.addCredits(6);
-      testPlayer.addDollars(12);
-      testPlayer.upgradeRank(4);
-      testPlayer.setLocation(rooms[0]);
-      playerInfo(testPlayer);
+      // Player testPlayer = new Player("Seamus", 0, rooms[0]);
+      // testPlayer.addCredits(6);
+      // testPlayer.addDollars(12);
+      // testPlayer.upgradeRank(4);
+      // testPlayer.setLocation(rooms[0]);
+      // playerInfo(testPlayer);
       // roleMenu(testPlayer);
-      assignRole(testPlayer, rooms[0].getCard().getRoles()[0]);
-      flipSceneCard(rooms[0]);
+      // assignRole(testPlayer, rooms[0].getCard().getRoles()[0]);
+      // flipSceneCard(rooms[0]);
    }  
    
    public void addSceneBacks(Room[] allRooms){
@@ -341,41 +353,43 @@ public class BoardLayersListener extends JFrame {
    //recives a String[] of the availible locations ot move to
    //loop checks wich locations are availible to be moved too and enables the 
    //appropriate buttons.
+   bCancel.setBounds(1210, 30, 100, 20);
+   bCancel.setVisible(true);
    for (int i =0; i< movementOptions.length;i++){
-      if (movementOptions[i] == "Trailers"){
+      if (movementOptions[i].equals("trailer")){
          bTrailers.setVisible(true);
          bTrailers.setEnabled(true);
-      }else if (movementOptions[i]=="Casting Office"){
+      }else if (movementOptions[i].equals("office")){
          bCastingOffice.setVisible(true);
          bCastingOffice.setEnabled(true);
-      }else if (movementOptions[i]=="Main Street"){
+      }else if (movementOptions[i].equals("Main Street")){
          bMainSteet.setVisible(true);
          bMainSteet.setEnabled(true);
-      }else if (movementOptions[i]=="Saloon"){
+      }else if (movementOptions[i].equals("Saloon")){
          bSaloon.setVisible(true);
          bSaloon.setEnabled(true);
-      }else if (movementOptions[i]=="Ranch"){
+      }else if (movementOptions[i].equals("Ranch")){
          bRanch.setVisible(true);
          bRanch.setEnabled(true);
-      }else if (movementOptions[i]=="Secret Hideout"){
+      }else if (movementOptions[i].equals("Secret Hideout")){
          bSecretHideout.setVisible(true);
          bSecretHideout.setEnabled(true);
-      }else if (movementOptions[i]=="Bank"){
+      }else if (movementOptions[i].equals("Bank")){
          bBank.setVisible(true);
          bBank.setEnabled(true);
-      }else if (movementOptions[i]=="Church"){
+      }else if (movementOptions[i].equals("Church")){
          bChurch.setVisible(true);
          bChurch.setEnabled(true);
-      }else if (movementOptions[i]=="Hotel"){
+      }else if (movementOptions[i].equals("Hotel")){
          bHotel.setVisible(true);
          bHotel.setEnabled(true);
-      }else if (movementOptions[i]=="Train Station"){
+      }else if (movementOptions[i].equals("Train Station")){
          bTrainStation.setVisible(true);
          bTrainStation.setEnabled(true);
-      }else if (movementOptions[i]=="Jail"){
+      }else if (movementOptions[i].equals("Jail")){
          bJail.setVisible(true);
          bJail.setEnabled(true);
-      }else if (movementOptions[i]=="General Store"){
+      }else if (movementOptions[i].equals("General Store")){
          bGeneralStore.setVisible(true);
          bGeneralStore.setEnabled(true);
       }
@@ -422,6 +436,7 @@ public class BoardLayersListener extends JFrame {
       playerCreditsLabel.setText("Credits: " + Integer.toString(p.getCredits()));
       playerLocationLabel.setText("Location: " + p.getLocation().getName());
       playerRankLabel.setText("Rank: " + p.getRank());
+      playerPracticeChipsLabel.setText("Practice chips: " + p.getPracticeChips());
    }
 
    // display scene card (Room location, int sceneNum)
@@ -460,6 +475,7 @@ public class BoardLayersListener extends JFrame {
       movementButtons[i].setVisible(false);
       movementButtons[i].setEnabled(false);
    }
+   bCancel.setVisible(false);
   }
 
    // display possible roles
@@ -566,31 +582,99 @@ public class BoardLayersListener extends JFrame {
       return shots[0];
    }
 
+   public void beginPlayerTurn(Player p) {
+      playerInfo(p);
+      actionMenu(p.getPossibleActions());
+   }
+
    // This class implements Mouse Events
 
+   // TODO: implement functions
    //getIdleCoordinates(Room r)
    //scalePlayerDown(Player p, Room r)
    //moveDie(Player p, Room r)
    //removeScene(Room r)
    //resetPlayerLocations(int numPlayers)
 
+   // TODO: event info display
+   // create display
+   // playerActed
+   // playerMoved
+   // playerRehearsed
+   // playerUpgraded
+   // playerTurnBegan
+   // gameEnded
+   // playerTookRole
+   // sceneWrapped
+   // dayEnded
 
 
-   class boardMouseListener implements MouseListener {
+   class boardMouseListener implements MouseListener{
 
-      // Code for the different button clicks
-      public void mouseClicked(MouseEvent e) {
-
-         if (e.getSource() == bAct) {
-            playerlabel.setVisible(true);
-            System.out.println("Acting is Selected\n");
-         } else if (e.getSource() == bRehearse) {
-            System.out.println("Rehearse is Selected\n");
+      // Controller
+      public void mouseClicked(MouseEvent e){
+         Object s = e.getSource();
+         if (s == bAct && bAct.isEnabled()) {
+            b.getActivePlayer().act();
+         } 
+         else if (s == bRehearse && bRehearse.isEnabled()) {
+            b.getActivePlayer().rehearsal();
+            board.playerInfo(b.getActivePlayer());
          }
-         else if (e.getSource()== bMove){
-            
+         else if (s == bMove && bMove.isEnabled()){
+            board.clearActionMenu();
+            board.enableMovement(b.getActivePlayer().getPossibleMoves());
+         }
+         else if (s == bTrailers) {
+            b.getActivePlayer().move(b.getRoomByName("trailer"));
+            // board.moveDie(b.getActivePlayer(), b.getRoomByName("trailer"));
+         }
+         else if (s == bTakeRole && bTakeRole.isEnabled()) {
+            board.clearActionMenu();
+            board.roleMenu(b.getActivePlayer());
+         }
+         else if (s == bUpgrade && bUpgrade.isEnabled()) {
+            board.clearActionMenu();
+            board.upgradeMenu(b.getActivePlayer(), b.getUpgrades());
+         }
+         else if (s == bEndTurn) {
+            b.nextPlayer();
+            board.beginPlayerTurn(b.getActivePlayer());
+         }
+         else if (s == bCancel) {
+            board.clearRoleMenu();
+            board.disableMovementButtons();
+            board.actionMenu(b.getActivePlayer().getPossibleActions());
+         }
 
-            System.out.println("Move is Selected\n");
+         else if (s == bEndGame){
+            board.setVisible(false);
+            board.dispose();
+         }
+         else if (roleButtons[0].isVisible()) {
+            ArrayList<Role> possible = b.getActivePlayer().getPossibleRoles();
+            for (int i = 0; i < possible.size(); i++) {
+               if (s == b) {
+                  b.getActivePlayer().acceptRole(possible.get(i));
+                  board.assignRole(b.getActivePlayer(), possible.get(i));
+               }
+            }
+         }
+         else if (upgradeButtons[0].isVisible()) {
+            ArrayList<int[]> possible = b.getActivePlayer().getPossibleUpgrades(b.getUpgrades());
+            for (int i = 0; i < possible.size(); i++) {
+               if (s == b) {
+                  b.getActivePlayer().upgradeRank(possible.get(i)[0]);
+                  if (possible.get(i)[3] == 0) {
+                     b.getActivePlayer().removeDollars(possible.get(i)[1]);
+                  }
+                  else if (possible.get(i)[3] == 1) {
+                     b.getActivePlayer().removeCredits(possible.get(i)[1]);
+                  }
+                  // board.scalePlayerDown(b.getActivePlayer(), b.getRoomByName("office"));
+                  board.playerInfo(b.getActivePlayer());
+               }
+            }
          }
       }
 
@@ -610,28 +694,30 @@ public class BoardLayersListener extends JFrame {
    public static void main(String[] args) throws ParserConfigurationException{
 
       XMLParser parser = new XMLParser();
-      View v = new View();
-      int numPlayers = 4;
+      board = new BoardLayersListener();
+      // int numPlayers = Integer.valueOf(JOptionPane.showInputDialog(board, "How many players?"));
+      int numPlayers = 2;
       Room[] rooms = parser.readRoomData("board.xml");
       Scene[] scenes = parser.readSceneData("cards.xml");
       int[][] upgrades = parser.getUpgradeData("board.xml");
-      Board b = new Board(v.getPlayerNames(numPlayers), numPlayers,
+      b = new Board(new String[] {"a", "b"}, numPlayers,
             rooms, scenes, upgrades);
       Random rnd = new Random();
       b.setActivePlayer(rnd.nextInt(numPlayers));
       b.resetSceneCards();
       boolean gameEnded = false;
-      BoardLayersListener board = new BoardLayersListener(numPlayers, rooms);
+      board = new BoardLayersListener(numPlayers, rooms);
       board.setVisible(true);
+      board.addSceneBacks(rooms);
+      board.beginPlayerTurn(b.getActivePlayer());
 
       // Take input from the user about number of players
-      JOptionPane.showInputDialog(board, "How many players?");
-      ArrayList<String> testArray = new ArrayList<String>();
-      Player testPlayer = new Player("Seamus", 0, rooms[0]);
-      testPlayer.addCredits(30);
-      testPlayer.addDollars(30);
-      testPlayer.upgradeRank(0);
-      testPlayer.setLocation(rooms[0]);
-      board.upgradeMenu(testPlayer, upgrades);
+      // ArrayList<String> testArray = new ArrayList<String>();
+      // Player testPlayer = new Player("Seamus", 0, rooms[0]);
+      // testPlayer.addCredits(30);
+      // testPlayer.addDollars(100);
+      // testPlayer.upgradeRank(0);
+      // testPlayer.setLocation(rooms[0]);
+      // board.upgradeMenu(testPlayer, upgrades);
    }
 }
