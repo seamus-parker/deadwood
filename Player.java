@@ -119,6 +119,19 @@ public class Player
     return this.idNumber;
   }
 
+  public ArrayList<int[]> getPossibleUpgrades(int[][] upgrades) {
+    ArrayList<int[]> possible = new ArrayList<int[]>();
+    for (int i = 0; i < 5; i++) {
+      if (this.canAffordUpgrade(i+2, upgrades, 0)) {
+         possible.add(new int[] {i+2, upgrades[0][i], 0});
+      }
+      if (this.canAffordUpgrade(i+2, upgrades, 1)) {
+         possible.add(new int[] {i+2, upgrades[0][i], 1});
+      }
+   }
+   return possible;
+  }
+
   public ArrayList<String> getPossibleActions() {
     ArrayList<String> actions = new ArrayList<String>();
     if (this.canMove()) actions.add("move");

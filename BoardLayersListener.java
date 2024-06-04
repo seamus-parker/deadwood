@@ -596,7 +596,7 @@ public class BoardLayersListener extends JFrame {
          if (s == bAct && bAct.isEnabled()) {
             
          } else if (s == bRehearse && bRehearse.isEnabled()) {
-            System.out.println("Rehearse is Selected\n");
+            b.getActivePlayer().rehearsal();
          }
          else if (s == bMove && bMove.isEnabled()){
             board.clearActionMenu();
@@ -604,7 +604,6 @@ public class BoardLayersListener extends JFrame {
          }
          else if (s == bTrailers) {
             // board.moveDie(b.getActivePlayer(), b.getRoomByName("trailer"));
-            System.out.println("hey");
          }
          else if (s == bTakeRole && bTakeRole.isEnabled()) {
             board.clearActionMenu();
@@ -627,6 +626,31 @@ public class BoardLayersListener extends JFrame {
          else if (s == bEndGame){
             board.setVisible(false);
             board.dispose();
+         }
+         else if (roleButtons[0].isVisible()) {
+            ArrayList<Role> possible = b.getActivePlayer().getPossibleRoles();
+            for (int i = 0; i < possible.size(); i++) {
+               if (s == b) {
+                  b.getActivePlayer().acceptRole(possible.get(i));
+                  board.assignRole(b.getActivePlayer(), possible.get(i));
+               }
+            }
+         }
+         else if (upgradeButtons[0].isVisible()) {
+            ArrayList<int[]> possible = b.getActivePlayer().getPossibleUpgrades(b.getUpgrades());
+            for (int i = 0; i < possible.size(); i++) {
+               if (s == b) {
+                  b.getActivePlayer().upgradeRank(possible.get(i)[0]);
+                  if (possible.get(i)[3] == 0) {
+                     b.getActivePlayer().removeDollars(possible.get(i)[1]);
+                  }
+                  else if (possible.get(i)[3] == 1) {
+                     b.getActivePlayer().removeCredits(possible.get(i)[1]);
+                  }
+                  // board.scalePlayerDown(b.getActivePlayer(), b.getRoomByName("office"));
+                  board.playerInfo(b.getActivePlayer());
+               }
+            }
          }
       }
 
