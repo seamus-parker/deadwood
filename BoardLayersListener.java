@@ -400,7 +400,10 @@ public class BoardLayersListener extends JFrame {
   }
   //also function for removing player die from card should be called after getting x and y from getIdleCorodinates
   //also used for upgrading player in the view, called with casting office and corodinates from getIdleCorodinates
-  public void scalePlayerDown(Player player, int x, int y){
+  public void scalePlayerDown(Player player, Room room){
+   int[] corodinates = getIdleCorodinates(player, room);
+   int x = corodinates[1];
+   int y = corodinates[0];
    playerJLabels[player.getId()].setVisible(false);
    String color = diceStrings[player.getId()];
    String rank = String.valueOf(player.getRank());
@@ -725,7 +728,7 @@ public class BoardLayersListener extends JFrame {
          }
          else if (s == bTrailers) {
             b.getActivePlayer().move(b.getRoomByName("trailer"));
-            // board.moveDie(b.getActivePlayer(), b.getRoomByName("trailer"));
+            board.moveDie(b.getActivePlayer(), b.getRoomByName("trailer"));
          }
          else if (s == bTakeRole && bTakeRole.isEnabled()) {
             board.clearActionMenu();
