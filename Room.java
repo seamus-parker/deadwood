@@ -8,6 +8,22 @@ public class Room {
     protected int y;
     protected int h;
     protected int w;
+    protected int cardJlabelPosition;
+    protected int cardBackPosition;
+
+    public int getCardJlabelPosition(){
+        return this.cardJlabelPosition;
+    }
+    public void setCardJlabelPosition(int i){
+        this.cardJlabelPosition = i;
+    }
+    public int getCardBackPos(){
+        return this.cardBackPosition;
+    }
+    public int setCardBackPosition(int i){
+        return this.cardBackPosition = i;
+
+    }
 
     public int getXCoordinates(){
         return this.x;

@@ -24,6 +24,12 @@ public class BoardLayersListener extends JFrame {
    JLabel playerlabel;
    JLabel mLabel;
 
+   //array for tracking the front of cards so they can be removed from the board
+   JLabel[] cardFronts; 
+
+   //Array for tracking card backs attached to each room so they can be hidden
+   JLabel[] cardBacks = new JLabel[10];
+
    // Action buttons
    JButton bAct = new JButton("ACT");
    JButton bMove = new JButton("MOVE");
@@ -89,7 +95,7 @@ public class BoardLayersListener extends JFrame {
   
   // Constructor
   
-  public BoardLayersListener(int numOfPlayers, Room[] rooms) {
+  public BoardLayersListener(int numOfPlayers, Room[] rooms, Room[] sets) {
       
        // Set the title of the JFrame
        super("Deadwood");
@@ -121,33 +127,8 @@ public class BoardLayersListener extends JFrame {
        // Add the card to the lower layer
        bPane.add(cardlabel, Integer.valueOf(1));
        
-      
-
-    
-       // Add a die for each player. 
-       //yCord = 270 +=20, xCord = 990 for Trailers
-       //yCord = 190, xCord = 1030 +=20 for Main Street
-       //yCord = 270 +=20, xCord = 940 for Saloon
-       //yCord = 280 +=20, xCord = 210 for General Store
-       //yCord = 270 +=20, xCord = 10 for Train Station
-       //yCord = 210, xCord = 390 +=20 for Jail
-       //yCord = 505 +=20, xCord = 10 for Casting office
-       //yCord = 525 +=20, xCord = 540 for Ranch
-       //yCord = 470 +=20, xCord = 970 for Bank
-       int yCord = 270;
-       int xCord = 990;
-       for(int i = 0;i < numOfPlayers;i++){
-         playerJLabels[i] = new JLabel();
-         ImageIcon pIcon = new ImageIcon("img/dice/dice/"+diceStrings[i]+"1"+".png");
-         Image scaledPlImage = pIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
-         ImageIcon smallpIcon = new ImageIcon(scaledPlImage);
-         playerJLabels[i].setIcon(smallpIcon);
-         playerJLabels[i].setBounds(xCord,yCord,20,20);
-         yCord += 20;
-         playerJLabels[i].setVisible(true);
-         bPane.add(playerJLabels[i], Integer.valueOf(3));
-         
-       }
+       //call function place players icon in starting locations
+       startingPlayerLocation(numOfPlayers);
       
        // Create the Menu for action buttons
        mLabel = new JLabel("MENU");
@@ -227,6 +208,10 @@ public class BoardLayersListener extends JFrame {
          yLoc += 30;      
       }
 
+
+      addSceneBacks(sets);
+
+
       // Create player info display
       currentPlayerLabel.setBounds(icon.getIconWidth() + 10, 240, 100, 20);
       playerNameLabel.setBounds(icon.getIconWidth() + 105, 240, 100, 20);
@@ -269,33 +254,45 @@ public class BoardLayersListener extends JFrame {
       actionMenu(a);
       clearActionMenu();
       // test player info
-      Player testPlayer = new Player("Seamus", 0, rooms[0]);
+      Player testPlayer = new Player("Seamus", 1, rooms[0]);
       testPlayer.addCredits(3);
       testPlayer.addDollars(12);
       testPlayer.upgradeRank(4);
       testPlayer.setLocation(rooms[1]);
       playerInfo(testPlayer);
       roleMenu(testPlayer);
-      assignRole(testPlayer, rooms[0].getCard().getRoles()[0]);
+      scalePlayerDown(testPlayer, shotXLoc, shotYLoc);
+      moveDie(testPlayer,rooms[3]);
+      hideSceneBacks(sets[0]);
+      
+
+      
    }  
-   
-   public void addSceneBacks(Room[] allRooms){
-      for(int i=0; i<allRooms.length; i++){
-         if(allRooms[i].getShots()>0){
-            int x = allRooms[i].getXCoordinates();
-            int y = allRooms[i].getYCoordinates();
+   //only needs to be called once, the card backs do not need to be removed
+   public void addSceneBacks(Room[] sets){
+      for(int i=0; i<sets.length; i++){
+         if(sets[i].getShots()>0){
+            int x = sets[i].getXCoordinates();
+            int y = sets[i].getYCoordinates();
             JLabel cardBack = new JLabel();
             ImageIcon cIcon =  new ImageIcon("img/CardBack-small.jpg");
             cardBack.setIcon(cIcon); 
             cardBack.setBounds(x,y,205,115);
             cardBack.setOpaque(true);
             // Add the scene card to the lower level
-            bPane.add(cardlabel, Integer.valueOf(1));
+            bPane.add(cardBack, Integer.valueOf(1));
+            sets[i].setCardBackPosition(i);
+            cardBacks[i] =cardBack;
          }
 
       }
 
 
+   }
+   //function to hide a scene Backs once scene is completed
+   public void hideSceneBacks(Room room){
+      int pos = room.getCardBackPos();
+      cardBacks[pos].setVisible(false);
    }
    public void flipSceneCard(Room room){
       //get the card associated with the room and place it above the card back
@@ -304,9 +301,18 @@ public class BoardLayersListener extends JFrame {
       cardlabel.setIcon(cIcon); 
       cardlabel.setBounds(room.getXCoordinates(),room.getYCoordinates(),205,115);
       cardlabel.setOpaque(true);
-     
+      cardFronts = cardFrontArrHelper(cardlabel, cardFronts, room);
       // Add the scene card to the upper level
       bPane.add(cardlabel, Integer.valueOf(3));
+   }
+   public JLabel[] cardFrontArrHelper(JLabel card, JLabel[] oldArray,Room room){
+      JLabel[] newArray = new JLabel[oldArray.length+1];
+      for (int i =0;i<oldArray.length;i++){
+         newArray[i]=oldArray[i];
+      }
+      newArray[oldArray.length] = card;
+      room.setCardJlabelPosition(oldArray.length);
+      return newArray;
    }
 
 
@@ -355,6 +361,8 @@ public class BoardLayersListener extends JFrame {
       }
    }
   }
+  //also function for removing player die from card should be called after getting x and y from getIdleCorodinates
+  //also used for upgrading player in the view, called with casting office and corodinates from getIdleCorodinates
   public void scalePlayerDown(Player player, int x, int y){
    playerJLabels[player.getId()].setVisible(false);
    String color = diceStrings[player.getId()];
@@ -370,6 +378,7 @@ public class BoardLayersListener extends JFrame {
 
 
   }
+  //also serves as the takeRole function in view, player only scaled up when on a role 
   public void scalePlayerUp(Player player, int x, int y){
    playerlabel = playerJLabels[player.getId()];
    ImageIcon pIcon = new ImageIcon("img/dice/dice/"+diceStrings[player.getId()]+String.valueOf(player.getRank())+".png");
@@ -377,6 +386,102 @@ public class BoardLayersListener extends JFrame {
    playerlabel.setBounds(x,y,46,46);
    bPane.add(playerlabel,Integer.valueOf(3));
   }
+  //all players must be scaled down before calling this function
+  public void resetPlayerLocation(int numOfPlayers){
+   int yCord = 270;
+   int xCord = 990;
+   for(int i = 0;i < numOfPlayers;i++){
+      playerJLabels[i].setVisible(false);
+      playerJLabels[i].setBounds(xCord,yCord,20,20);
+      yCord += 20;
+      playerJLabels[i].setVisible(true);
+
+   }
+  }
+
+
+   public void startingPlayerLocation(int numOfPlayers){
+      int yCord = 270;
+      int xCord = 990;
+      String rank = "1";
+      if(numOfPlayers>6){
+         rank = "2";
+      }
+      for(int i = 0;i < numOfPlayers;i++){
+         playerJLabels[i] = new JLabel();
+         ImageIcon pIcon = new ImageIcon("img/dice/dice/"+diceStrings[i]+rank+".png");
+         Image scaledPlImage = pIcon.getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+         ImageIcon smallpIcon = new ImageIcon(scaledPlImage);
+         playerJLabels[i].setIcon(smallpIcon);
+         playerJLabels[i].setBounds(xCord,yCord,20,20);
+         yCord += 20;
+         playerJLabels[i].setVisible(true);
+         bPane.add(playerJLabels[i], Integer.valueOf(3));
+       }
+   }
+
+   //to do
+   public void moveDie(Player player, Room room){
+      int[] corodinates = getIdleCorodinates(player, room);
+      playerJLabels[player.getId()].setVisible(false);
+      playerJLabels[player.getId()].setBounds(corodinates[1],corodinates[0],20,20);
+      playerJLabels[player.getId()].setVisible(true);
+
+   }
+
+   public void removeSceneCard(Room room){
+      int pos = room.getCardJlabelPosition();
+      bPane.remove(cardFronts[pos]);
+      bPane.validate();
+      bPane.repaint();
+   }
+
+ 
+   
+   public int[] getIdleCorodinates(Player player,Room location) {
+      String name = location.getName();
+      //array returned has form {yCord,xCord} 
+      int[] idleCorodinatesTS = {270 + (20*player.getId()),10};//yCord = 270 +=20, xCord = 10 for Train Station
+      int[] idleCorodinatesSH = {850,250 + (20*player.getId())};//yCord = 850, xCord = 250 +=20 for Secret Hideout
+      int[] idleCorodinatesC = {700,750 + (20*player.getId())};//yCord = 700, xCord = 750 +=20 for Church
+      int[] idleCorodinatesH = {480 + (20*player.getId()),1010};//yCord = 480 +=20, xCord = 1010 for Hotel
+      int[] idleCorodinatesMS = {190,1030 + (20*player.getId())};//yCord = 190, xCord = 1030 +=20 for Main Street
+      int[] idleCorodinatesJ = {210,390 + (20*player.getId())};//yCord = 210, xCord = 390 +=20 for Jail
+      int[] idleCorodinatesGS = {280 + (20*player.getId()),210};//yCord = 280 +=20, xCord = 210 for General Store
+      int[] idleCorodinatesR = {525 + (20*player.getId()),540};//yCord = 525 +=20, xCord = 540 for Ranch
+      int[] idleCorodinatesB = {470 + (20*player.getId()),970};//yCord = 470 +=20, xCord = 970 for Bank
+      int[] idleCorodinatesS = {270 + (20*player.getId()),940};//yCord = 270 +=20, xCord = 940 for Saloon
+      int[] idleCorodinatesCO = {505 + (20*player.getId()),10};//yCord = 505 +=20, xCord = 10 for Casting office
+      int[] idleCorodinatesT = {270 + (20*player.getId()),990};//yCord = 270 +=20, xCord = 990 for Trailers
+      switch(name) {
+         case "Train Station":
+            return idleCorodinatesTS;
+         case "Secret Hideout":
+            return idleCorodinatesSH;
+         case "Church":
+            return idleCorodinatesC;
+         case "Hotel":
+            return idleCorodinatesH;
+         case "Main Street":
+            return idleCorodinatesMS;
+         case "Jail":
+            return idleCorodinatesJ;
+         case "General Store":
+            return idleCorodinatesGS;
+         case "Ranch":
+            return idleCorodinatesR;
+         case "Bank":
+            return idleCorodinatesB;
+         case "Saloon":
+            return idleCorodinatesS;
+         case "Trailers":
+            return idleCorodinatesT;
+         case "Casting Office":
+            return idleCorodinatesCO;
+      }
+      return idleCorodinatesT;
+   }
+   
   
 
 
@@ -435,6 +540,7 @@ public class BoardLayersListener extends JFrame {
       movementButtons[i].setEnabled(false);
    }
   }
+  
 
    // display possible roles
 
@@ -468,11 +574,6 @@ public class BoardLayersListener extends JFrame {
    }
 
    // move player dice (Player player, Room location)
-
-   // change player rank (Player player, int rank)
-   public void setPlayerRank(Player p, int rank) {
-      
-   }
 
    // remove shot counters (Room location)
    public void removeShotCounter(Room location) {
@@ -557,18 +658,24 @@ public class BoardLayersListener extends JFrame {
 
       XMLParser parser = new XMLParser();
       View v = new View();
-      int numPlayers = 4;
+      int numPlayers = 8;
       Room[] rooms = parser.readRoomData("board.xml");
       Scene[] scenes = parser.readSceneData("cards.xml");
       int[][] upgrades = parser.getUpgradeData("board.xml");
       Board b = new Board(v.getPlayerNames(numPlayers), numPlayers,
             rooms, scenes, upgrades);
       Random rnd = new Random();
+      Room[] sets = b.sets;
       b.setActivePlayer(rnd.nextInt(numPlayers));
       b.resetSceneCards();
       boolean gameEnded = false;
-      BoardLayersListener board = new BoardLayersListener(numPlayers, rooms);
+      
+      BoardLayersListener board = new BoardLayersListener(numPlayers, rooms,sets);
       board.setVisible(true);
+      
+      
+      
+      
 
       // Take input from the user about number of players
       JOptionPane.showInputDialog(board, "How many players?");

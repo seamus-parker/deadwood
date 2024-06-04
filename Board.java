@@ -5,7 +5,7 @@ public class Board {
 
     private Player[] players;
 
-    private Room[] sets;
+    public Room[] sets;
 
     private Scene[] deck;
 
