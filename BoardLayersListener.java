@@ -26,6 +26,9 @@ public class BoardLayersListener extends JFrame {
    JLabel playerlabel;
    JLabel mLabel;
 
+   // event info display
+   JLabel eventInfoDisplay = new JLabel();
+
    // Action buttons
    JButton bAct = new JButton("ACT");
    JButton bMove = new JButton("MOVE");
@@ -260,7 +263,7 @@ public class BoardLayersListener extends JFrame {
       playerCreditsLabel.setBounds(icon.getIconWidth() + 10, 460, 100, 20);
       playerLocationLabel.setBounds(icon.getIconWidth() + 10, 480, 200, 20);
       playerRankLabel.setBounds(icon.getIconWidth() + 10, 500, 100, 20);
-      playerPracticeChipsLabel.setBounds(icon.getIconWidth() + 10, 520, 100, 20);
+      playerPracticeChipsLabel.setBounds(icon.getIconWidth() + 10, 520, 200, 20);
 
       bPane.add(currentPlayerLabel, Integer.valueOf(2));
       bPane.add(playerNameLabel, Integer.valueOf(2));
@@ -270,6 +273,11 @@ public class BoardLayersListener extends JFrame {
       bPane.add(playerRankLabel, Integer.valueOf(2));
       bPane.add(playerPracticeChipsLabel, Integer.valueOf(2));
       
+      // create event info display
+      eventInfoDisplay.setBounds(icon.getIconWidth()+10, 550, 200, 200);
+      eventInfoDisplay.setText("<html>This is<br>a multi-line string");
+      bPane.add(eventInfoDisplay, Integer.valueOf(2));
+
       // Create shot counters
       int curRoom = 0;
       int shotXLoc = 0;
@@ -428,6 +436,7 @@ public class BoardLayersListener extends JFrame {
       playerCreditsLabel.setText("Credits: " + Integer.toString(p.getCredits()));
       playerLocationLabel.setText("Location: " + p.getLocation().getName());
       playerRankLabel.setText("Rank: " + p.getRank());
+      playerPracticeChipsLabel.setText("Practice chips: " + p.getPracticeChips());
    }
 
    // display scene card (Room location, int sceneNum)
@@ -580,29 +589,44 @@ public class BoardLayersListener extends JFrame {
 
    // This class implements Mouse Events
 
+   // TODO: implement functions
    //getIdleCoordinates(Room r)
    //scalePlayerDown(Player p, Room r)
    //moveDie(Player p, Room r)
    //removeScene(Room r)
    //resetPlayerLocations(int numPlayers)
 
+   // TODO: event info display
+   // create display
+   // playerActed
+   // playerMoved
+   // playerRehearsed
+   // playerUpgraded
+   // playerTurnBegan
+   // gameEnded
+   // playerTookRole
+   // sceneWrapped
+   // dayEnded
 
 
    class boardMouseListener implements MouseListener{
 
-      // Code for the different button clicks
+      // Controller
       public void mouseClicked(MouseEvent e){
          Object s = e.getSource();
          if (s == bAct && bAct.isEnabled()) {
-            
-         } else if (s == bRehearse && bRehearse.isEnabled()) {
+            b.getActivePlayer().act();
+         } 
+         else if (s == bRehearse && bRehearse.isEnabled()) {
             b.getActivePlayer().rehearsal();
+            board.playerInfo(b.getActivePlayer());
          }
          else if (s == bMove && bMove.isEnabled()){
             board.clearActionMenu();
             board.enableMovement(b.getActivePlayer().getPossibleMoves());
          }
          else if (s == bTrailers) {
+            b.getActivePlayer().move(b.getRoomByName("trailer"));
             // board.moveDie(b.getActivePlayer(), b.getRoomByName("trailer"));
          }
          else if (s == bTakeRole && bTakeRole.isEnabled()) {
