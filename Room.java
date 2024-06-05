@@ -8,7 +8,7 @@ public class Room {
     protected int y;
     protected int h;
     protected int w;
-    protected int cardJlabelPosition;
+    protected int cardJlabelPosition =-1;
     protected int cardBackPosition;
 
     public int getCardJlabelPosition(){
