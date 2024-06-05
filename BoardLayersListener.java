@@ -27,7 +27,7 @@ public class BoardLayersListener extends JFrame {
    JLabel mLabel;
 
    //array for tracking the front of cards so they can be removed from the board
-   JLabel[] cardFronts; 
+   JLabel[] cardFronts = new JLabel[0]; 
 
    //Array for tracking card backs attached to each room so they can be hidden
    JLabel[] cardBacks = new JLabel[10];
@@ -935,7 +935,7 @@ public class BoardLayersListener extends JFrame {
 
       board = new BoardLayersListener();
       // int numPlayers = Integer.valueOf(JOptionPane.showInputDialog(board, "How many players?"));
-      int numPlayers = 8;
+      int numPlayers = 3;
       Room[] rooms = parser.readRoomData("board.xml");
       Scene[] scenes = parser.readSceneData("cards.xml");
       int[][] upgrades = parser.getUpgradeData("board.xml");
