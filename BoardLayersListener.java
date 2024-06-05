@@ -785,6 +785,12 @@ public class BoardLayersListener extends JFrame {
    // sceneWrapped
    public void sceneWrappedED(Room room){
       eventInfoDisplay.setText("<html>"+room.getName() +" has finished filming.");
+      Player[] allPlayers=b.getPlayers();
+      for (int i = 0;i< allPlayers.length;i++){
+         if (allPlayers[i].getLocation() == room){
+            scalePlayerDown(allPlayers[i], room);
+         }
+      }
    }
    // dayEnded
    public void dayEndedED(){

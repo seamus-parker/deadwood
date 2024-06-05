@@ -14,6 +14,8 @@ public class Set extends Room{
   
     public ArrayList<Player> extras = new ArrayList<Player>();
 
+    public Player[] playersWithRoles;
+
     private int[][] shotCoords;
 
     public Scene getCard(){
