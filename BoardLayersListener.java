@@ -92,6 +92,7 @@ public class BoardLayersListener extends JFrame {
    JLabel playerLocationLabel = new JLabel();
    JLabel playerRankLabel = new JLabel();
    JLabel playerPracticeChipsLabel = new JLabel();
+   // JLabel playerDiceLabel = new JLabel();
 
    // Player dice labels
    JLabel[] playerJLabels = new JLabel[8];
@@ -293,6 +294,7 @@ public class BoardLayersListener extends JFrame {
       playerLocationLabel.setBounds(icon.getIconWidth() + 10, 480, 200, 20);
       playerRankLabel.setBounds(icon.getIconWidth() + 10, 500, 100, 20);
       playerPracticeChipsLabel.setBounds(icon.getIconWidth() + 10, 520, 200, 20);
+      // playerDiceLabel.setBounds(icon.getIconHeight() + 50, 450, 46, 46);
 
       bPane.add(currentPlayerLabel, Integer.valueOf(2));
       bPane.add(playerMoneyLabel, Integer.valueOf(2));
@@ -300,6 +302,7 @@ public class BoardLayersListener extends JFrame {
       bPane.add(playerLocationLabel, Integer.valueOf(2));
       bPane.add(playerRankLabel, Integer.valueOf(2));
       bPane.add(playerPracticeChipsLabel, Integer.valueOf(2));
+      // bPane.add(playerDiceLabel, Integer.valueOf(2));
       
       // create event info display
       eventInfoDisplay.setBounds(icon.getIconWidth()+10, 550, 200, 200);
@@ -1071,11 +1074,11 @@ public class BoardLayersListener extends JFrame {
 
       // testing =======
 
-      for (Player testP : b.getPlayers()) {
-         testP.addDollars(100);
-         testP.addCredits(10);
-         testP.setLocation(b.getRoomByName("office"));
-      }
+      // for (Player testP : b.getPlayers()) {
+      //    testP.addDollars(100);
+      //    testP.addCredits(10);
+      //    testP.setLocation(b.getRoomByName("office"));
+      // }
 
       // ===============
       board = new BoardLayersListener(numPlayers, rooms);
