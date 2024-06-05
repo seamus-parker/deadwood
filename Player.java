@@ -126,7 +126,7 @@ public class Player
          possible.add(new int[] {i+2, upgrades[0][i], 0});
       }
       if (this.canAffordUpgrade(i+2, upgrades, 1)) {
-         possible.add(new int[] {i+2, upgrades[0][i], 1});
+         possible.add(new int[] {i+2, upgrades[1][i], 1});
       }
    }
    return possible;
@@ -180,7 +180,37 @@ public class Player
   }
 
   public boolean canUpgrade() {
-    if (this.location.getName() == "office") {
+    int minCredits = 0;
+    int minDollars = 0;
+    boolean canAfford = false;
+    switch (this.rank) {
+      case 1:
+        minCredits = 5;
+        minDollars = 4;
+        break;
+      case 2:
+        minCredits = 10;
+        minDollars = 10;
+        break;
+      case 3:
+        minCredits = 15;
+        minDollars = 18;
+        break;
+      case 4:
+        minCredits = 20;
+        minDollars = 28;
+        break;
+      case 5:
+        minCredits = 25;
+        minDollars = 40;
+        break;
+      case 6:
+        return false;
+    }
+    if (this.dollars >= minDollars || this.credits >= minCredits) {
+      canAfford = true;
+    }
+    if (this.location.getName() == "office" && canAfford) {
       return true;
     }
     else {
@@ -216,6 +246,9 @@ public class Player
   }
   public int getCredits(){
     return credits;
+  }
+  public boolean getIsWorking() {
+    return this.isWorking;
   }
 
   public boolean act() {

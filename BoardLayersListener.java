@@ -649,20 +649,31 @@ public class BoardLayersListener extends JFrame {
 
    public void upgradeMenu(Player p, int[][] upgrades) {
       int yLoc = 30;
-      for (int i = 0; i < 5; i++) {
-         if (p.canAffordUpgrade(i+2, upgrades, 0)) {
-            upgradeButtons[i].setLocation(1210, yLoc);
-            upgradeButtons[i].setVisible(true);
-            yLoc += 30;
+      String currency = "";
+      ArrayList<int[]> possible = p.getPossibleUpgrades(upgrades);
+      for (int i = 0; i < possible.size(); i++) {
+         if (possible.get(i)[2] == 0) {
+            currency = "dollars";
          }
-         if (p.canAffordUpgrade(i+2, upgrades, 1)) {
-            upgradeButtons[i+5].setLocation(1210, yLoc);
-            upgradeButtons[i+5].setVisible(true);
-            yLoc += 30;
+         else {
+            currency = "credits";
          }
+         upgradeButtons[i].setLocation(1210, yLoc);
+         upgradeButtons[i].setVisible(true);
+         upgradeButtons[i].setText(String.format("Rank %d (%d %s)", 
+                                   possible.get(i)[0], possible.get(i)[1], currency));
+         yLoc += 30;
       }
+      
       bCancel.setBounds(1210, yLoc, 225, 20);
       bCancel.setVisible(true);
+   }
+
+   public void clearUpgradeMenu() {
+      for (int i = 0; i < upgradeButtons.length; i++) {
+         upgradeButtons[i].setVisible(false);
+      }
+      bCancel.setVisible(false);
    }
 
    // move player dice (Player player, Room location)
@@ -747,13 +758,34 @@ public class BoardLayersListener extends JFrame {
          Player p = b.getActivePlayer();
          Object s = e.getSource();
          if (s == bAct && bAct.isEnabled()) {
-            p.act();
+            if (p.act()) {
+               board.removeShotCounter(p.getLocation());
+            }
+            if (p.getLocation().getShotCounters() == 0) {
+               removeSceneCard(p.getLocation());
+               hideSceneBack(p.getLocation());
+               for (Player thisPlayer : b.getPlayers()) {
+                  if (thisPlayer.getLocation().getName().equals(p.getLocation().getName()) && thisPlayer.getIsWorking()) {
+                     board.scalePlayerDown(thisPlayer, p.getLocation());
+                     thisPlayer.setWorking(false);
+                  }
+               }
+               if (b.activeScenes() <= 1) {
+                  b.endDay();
+                  for (Player thisPlayer : b.getPlayers()) {
+                     board.scalePlayerDown(thisPlayer, b.getRoomByName("trailer"));
+                  }
+                  p.endTurn();
+                  b.nextPlayer();
+               }
+            }
             board.clearActionMenu();
             board.actionMenu(p.getPossibleActions());
             board.playerInfo(p);
          } 
          else if (s == bRehearse && bRehearse.isEnabled()) {
             p.rehearsal();
+            board.actionMenu(p.getPossibleActions());
             board.playerInfo(p);
          }
          else if (s == bMove && bMove.isEnabled()){
@@ -871,6 +903,10 @@ public class BoardLayersListener extends JFrame {
          else if (s == bUpgrade && bUpgrade.isEnabled()) {
             board.clearActionMenu();
             board.upgradeMenu(p, b.getUpgrades());
+            ArrayList<int[]> possible = p.getPossibleUpgrades(b.getUpgrades());
+            for (int[] inti : possible) {
+               System.out.format("%d %d %d\n", inti[0], inti[1], inti[2]);
+            }
          }
          else if (s == bEndTurn) {
             p.endTurn();
@@ -880,6 +916,7 @@ public class BoardLayersListener extends JFrame {
          else if (s == bCancel) {
             board.clearRoleMenu();
             board.disableMovementButtons();
+            board.clearUpgradeMenu();
             board.actionMenu(p.getPossibleActions());
          }
 
@@ -901,16 +938,18 @@ public class BoardLayersListener extends JFrame {
          else if (upgradeButtons[0].isVisible()) {
             ArrayList<int[]> possible = p.getPossibleUpgrades(b.getUpgrades());
             for (int i = 0; i < possible.size(); i++) {
-               if (s == b) {
+               if (s == upgradeButtons[i]) {
                   p.upgradeRank(possible.get(i)[0]);
-                  if (possible.get(i)[3] == 0) {
+                  if (possible.get(i)[2] == 0) {
                      p.removeDollars(possible.get(i)[1]);
                   }
-                  else if (possible.get(i)[3] == 1) {
+                  else if (possible.get(i)[2] == 1) {
                      p.removeCredits(possible.get(i)[1]);
                   }
                   board.scalePlayerDown(p, b.getRoomByName("office"));
                   board.playerInfo(p);
+                  board.clearUpgradeMenu();
+                  board.actionMenu(p.getPossibleActions());
                }
             }
          }
@@ -946,6 +985,16 @@ public class BoardLayersListener extends JFrame {
       b.setActivePlayer(rnd.nextInt(numPlayers));
       b.resetSceneCards();
       boolean gameEnded = false;
+
+      // testing =======
+
+      for (Player testP : b.getPlayers()) {
+         testP.addDollars(100);
+         testP.addCredits(10);
+         testP.setLocation(b.getRoomByName("office"));
+      }
+
+      // ===============
       board = new BoardLayersListener(numPlayers, rooms);
       board.setVisible(true);
       board.beginPlayerTurn(b.getActivePlayer());
