@@ -942,9 +942,6 @@ public class BoardLayersListener extends JFrame {
             board.clearActionMenu();
             board.upgradeMenu(p, b.getUpgrades());
             ArrayList<int[]> possible = p.getPossibleUpgrades(b.getUpgrades());
-            for (int[] inti : possible) {
-               System.out.format("%d %d %d\n", inti[0], inti[1], inti[2]);
-            }
          }
          else if (s == bEndTurn) {
             p.endTurn();
