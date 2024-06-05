@@ -133,7 +133,7 @@ public class BoardLayersListener extends JFrame {
        cardlabel = new JLabel();
        ImageIcon cIcon =  new ImageIcon("img/CardBack-small.jpg");
        cardlabel.setIcon(cIcon); 
-       cardlabel.setBounds(969,28,205,115);
+      //  cardlabel.setBounds(969,28,205,115);
        cardlabel.setOpaque(true);
       
        // Add the card to the lower layer
@@ -287,7 +287,7 @@ public class BoardLayersListener extends JFrame {
       }
 
       // Create player info display
-      currentPlayerLabel.setBounds(icon.getIconWidth() + 10, 420, 100, 20);
+      currentPlayerLabel.setBounds(icon.getIconWidth() + 10, 420, 250, 20);
       playerMoneyLabel.setBounds(icon.getIconWidth() + 10, 440, 100, 20);
       playerCreditsLabel.setBounds(icon.getIconWidth() + 10, 460, 100, 20);
       playerLocationLabel.setBounds(icon.getIconWidth() + 10, 480, 200, 20);
@@ -744,48 +744,48 @@ public class BoardLayersListener extends JFrame {
    public void playerActedED(Player player, boolean result){
       if (result == true){
          if (player.getCurrentRole().isOnCard()){
-            eventInfoDisplay.setText("<html>"+player.getName()+" has acted succesfully.<br>They recived 2 Credits for thier work");
+            eventInfoDisplay.setText("<html>"+player.getName()+" has acted succesfully. They recived 2 credits for thier work.");
          }else{
-            eventInfoDisplay.setText("<html>"+player.getName()+" has acted succesfully.<br>They recived 1 Dollar and 1 Credit");
+            eventInfoDisplay.setText("<html>"+player.getName()+" has acted succesfully. They recived 1 dollar and 1 credit.");
          }
       }else if(player.getCurrentRole().isOnCard()) {
-         eventInfoDisplay.setText("<html>"+player.getName()+" has acted unsuccesfully.<br> They recived nothing");
+         eventInfoDisplay.setText("<html>"+player.getName()+" has acted unsuccesfully. They recived nothing");
       }else{
-         eventInfoDisplay.setText("<html>"+player.getName()+" has acted unsuccesfully.<br>They recived 1 Dollar for thier effort");
+         eventInfoDisplay.setText("<html>"+player.getName()+" has acted unsuccesfully. They recived 1 dollar for thier effort");
       }
    }
 
    // playerMoved
    public void playerMovedED(Player player){
-      eventInfoDisplay.setText("<html>"+player.getName()+" has moved .<br>"+ player.getName()+"is now located in the "+player.getLocation().getName());
+      eventInfoDisplay.setText("<html>"+player.getName()+" has moved. "+ player.getName()+" is now located in the "+player.getLocation().getName());
    }
    // playerRehearsed
    public void playerRehearsedED(Player player){
-      eventInfoDisplay.setText("<html>"+player.getName()+" has reheasred.<br>"+player.getName()+ "gained + 1 practice chips");
+      eventInfoDisplay.setText("<html>"+player.getName()+" has rehearsed. "+player.getName()+ " gained + 1 practice chips");
    }
    // playerUpgraded
    public void playerUpgradedED(Player player){
-      eventInfoDisplay.setText("<html>"+player.getName()+" has upgraded their rank.<br>"+player.getName()+"was "+ (player.getRank()-1) +"and thier new rank is "+player.getRank());
+      eventInfoDisplay.setText("<html>"+player.getName()+" has upgraded their rank. "+player.getName()+"\'s new rank is "+player.getRank());
    }
    // playerTurnBegan
    public void playerTurnBeganED(Player player){
-      eventInfoDisplay.setText("<html>"+player.getName()+" has begun thier turn.<br> What will thier next move be?");
+      eventInfoDisplay.setText("<html>"+player.getName()+" has begun thier turn. What will thier next move be?");
    }
    // gameEnded
    public void gameEndedED(Player player){
-      eventInfoDisplay.setText("<html> The game has ended!"+player.getName()+" is the winner.<br>");
+      eventInfoDisplay.setText("<html>The game has ended! "+player.getName()+" is the winner.<br>");
    }
    // playerTookRole
    public void playerTookRoleED(Player player){
-      eventInfoDisplay.setText("<html>"+player.getName()+" has accepted a new role.<br>"+player.getName()+"is now the the"+player.getCurrentRole().getName());
+      eventInfoDisplay.setText("<html>"+player.getName()+" has accepted a new role. "+player.getName()+" is now playing "+player.getCurrentRole().getName());
    }
    // sceneWrapped
    public void sceneWrappedED(Room room){
-      eventInfoDisplay.setText("<html>"+room.getName() +" has finished filming.<br>");
+      eventInfoDisplay.setText("<html>"+room.getName() +" has finished filming.");
    }
    // dayEnded
    public void dayEndedED(){
-      eventInfoDisplay.setText("<html>The day has ended.<br>The Board has been reset and new scene cards added");
+      eventInfoDisplay.setText("<html>The day has ended. The board has been reset and new scene cards added.");
    }
 
 
@@ -796,10 +796,13 @@ public class BoardLayersListener extends JFrame {
          Player p = b.getActivePlayer();
          Object s = e.getSource();
          if (s == bAct && bAct.isEnabled()) {
-            if (p.act()) {
+            boolean success = p.act();
+            board.playerActedED(p, success);
+            if (success) {
                board.removeShotCounter(p.getLocation());
             }
             if (p.getLocation().getShotCounters() == 0) {
+               board.sceneWrappedED(p.getLocation());
                removeSceneCard(p.getLocation());
                hideSceneBack(p.getLocation());
                for (Player thisPlayer : b.getPlayers()) {
@@ -809,12 +812,18 @@ public class BoardLayersListener extends JFrame {
                   }
                }
                if (b.activeScenes() <= 1) {
+                  board.dayEndedED();
                   b.endDay();
+                  b.resetSceneCards();
                   for (Player thisPlayer : b.getPlayers()) {
                      board.scalePlayerDown(thisPlayer, b.getRoomByName("trailer"));
                   }
                   p.endTurn();
                   b.nextPlayer();
+                  for (Room r : b.getRooms()) {
+                     board.replaceShotCounters(r);
+                     board.makeSceneBacksVisible(b.getRooms());
+                  }
                }
             }
             board.clearActionMenu();
@@ -823,8 +832,9 @@ public class BoardLayersListener extends JFrame {
          } 
          else if (s == bRehearse && bRehearse.isEnabled()) {
             p.rehearsal();
-            board.actionMenu(p.getPossibleActions());
+            //board.actionMenu(p.getPossibleActions());
             board.playerInfo(p);
+            board.playerRehearsedED(p);
          }
          else if (s == bMove && bMove.isEnabled()){
             board.clearActionMenu();
@@ -835,6 +845,8 @@ public class BoardLayersListener extends JFrame {
             board.moveDie(p, b.getRoomByName("trailer"));
             board.disableMovementButtons();
             board.actionMenu(p.getPossibleActions());
+            board.playerInfo(p);
+            board.playerMovedED(p);
          }
          else if (s == bMainSteet) {
             p.move(b.getRoomByName("Main Street"));
@@ -844,6 +856,8 @@ public class BoardLayersListener extends JFrame {
             if (p.getLocation().getCardJlabelPosition() == -1) {
                flipSceneCard(p.getLocation());
             }
+            board.playerInfo(p);
+            board.playerMovedED(p);
          }
          else if (s == bSaloon) {
             p.move(b.getRoomByName("Saloon"));
@@ -853,6 +867,8 @@ public class BoardLayersListener extends JFrame {
             if (p.getLocation().getCardJlabelPosition() == -1) {
                flipSceneCard(p.getLocation());
             }
+            board.playerInfo(p);
+            board.playerMovedED(p);
          }
          else if (s == bGeneralStore) {
             p.move(b.getRoomByName("General Store"));
@@ -862,6 +878,8 @@ public class BoardLayersListener extends JFrame {
             if (p.getLocation().getCardJlabelPosition() == -1) {
                flipSceneCard(p.getLocation());
             }
+            board.playerInfo(p);
+            board.playerMovedED(p);
          }
          else if (s == bTrainStation) {
             p.move(b.getRoomByName("Train Station"));
@@ -871,6 +889,8 @@ public class BoardLayersListener extends JFrame {
             if (p.getLocation().getCardJlabelPosition() == -1) {
                flipSceneCard(p.getLocation());
             }
+            board.playerInfo(p);
+            board.playerMovedED(p);
          }
          else if (s == bJail) {
             p.move(b.getRoomByName("Jail"));
@@ -880,12 +900,16 @@ public class BoardLayersListener extends JFrame {
             if (p.getLocation().getCardJlabelPosition() == -1) {
                flipSceneCard(p.getLocation());
             }
+            board.playerInfo(p);
+            board.playerMovedED(p);
          }
          else if (s == bCastingOffice) {
             p.move(b.getRoomByName("office"));
             board.moveDie(p, b.getRoomByName("office"));
             board.disableMovementButtons();
             board.actionMenu(p.getPossibleActions());
+            board.playerInfo(p);
+            board.playerMovedED(p);
          }
          else if (s == bRanch) {
             p.move(b.getRoomByName("Ranch"));
@@ -895,6 +919,8 @@ public class BoardLayersListener extends JFrame {
             if (p.getLocation().getCardJlabelPosition() == -1) {
                flipSceneCard(p.getLocation());
             }
+            board.playerInfo(p);
+            board.playerMovedED(p);
          }
          else if (s == bSecretHideout) {
             p.move(b.getRoomByName("Secret Hideout"));
@@ -904,6 +930,8 @@ public class BoardLayersListener extends JFrame {
             if (p.getLocation().getCardJlabelPosition() == -1) {
                flipSceneCard(p.getLocation());
             }
+            board.playerInfo(p);
+            board.playerMovedED(p);
          }
          else if (s == bChurch) {
             p.move(b.getRoomByName("Church"));
@@ -913,6 +941,8 @@ public class BoardLayersListener extends JFrame {
             if (p.getLocation().getCardJlabelPosition() == -1) {
                flipSceneCard(p.getLocation());
             }
+            board.playerInfo(p);
+            board.playerMovedED(p);
          }
          else if (s == bBank) {
             p.move(b.getRoomByName("Bank"));
@@ -922,6 +952,8 @@ public class BoardLayersListener extends JFrame {
             if (p.getLocation().getCardJlabelPosition() == -1) {
                flipSceneCard(p.getLocation());
             }
+            board.playerInfo(p);
+            board.playerMovedED(p);
          }
          else if (s == bHotel) {
             p.move(b.getRoomByName("Hotel"));
@@ -931,8 +963,9 @@ public class BoardLayersListener extends JFrame {
             if (p.getLocation().getCardJlabelPosition() == -1) {
                flipSceneCard(p.getLocation());
             }
+            board.playerInfo(p);
+            board.playerMovedED(p);
          }
-         
          
          else if (s == bTakeRole && bTakeRole.isEnabled()) {
             board.clearActionMenu();
@@ -941,12 +974,12 @@ public class BoardLayersListener extends JFrame {
          else if (s == bUpgrade && bUpgrade.isEnabled()) {
             board.clearActionMenu();
             board.upgradeMenu(p, b.getUpgrades());
-            ArrayList<int[]> possible = p.getPossibleUpgrades(b.getUpgrades());
          }
          else if (s == bEndTurn) {
             p.endTurn();
             b.nextPlayer();
             board.beginPlayerTurn(b.getActivePlayer());
+            board.playerTurnBeganED(b.getActivePlayer());
          }
          else if (s == bCancel) {
             board.clearRoleMenu();
@@ -956,8 +989,13 @@ public class BoardLayersListener extends JFrame {
          }
 
          else if (s == bEndGame){
-            board.setVisible(false);
-            board.dispose();
+            board.clearActionMenu();
+            board.clearRoleMenu();
+            board.clearUpgradeMenu();
+            board.disableMovementButtons();
+            board.gameEndedED(b.calculateWinner().get(0));
+            // board.setVisible(false);
+            // board.dispose();
          }
          else if (roleButtons[0].isVisible()) {
             ArrayList<Role> possible = p.getPossibleRoles();
@@ -967,6 +1005,7 @@ public class BoardLayersListener extends JFrame {
                   board.assignRole(p, possible.get(i));
                   board.clearRoleMenu();
                   board.actionMenu(p.getPossibleActions());
+                  board.playerTookRoleED(p);
                }
             }
          }
@@ -985,6 +1024,7 @@ public class BoardLayersListener extends JFrame {
                   board.playerInfo(p);
                   board.clearUpgradeMenu();
                   board.actionMenu(p.getPossibleActions());
+                  board.playerUpgradedED(p);
                }
             }
          }
@@ -1008,13 +1048,21 @@ public class BoardLayersListener extends JFrame {
       XMLParser parser = new XMLParser();
 
       board = new BoardLayersListener();
-      // int numPlayers = Integer.valueOf(JOptionPane.showInputDialog(board, "How many players?"));
-      int numPlayers = 3;
+      int numPlayers = Integer.valueOf(JOptionPane.showInputDialog(board, "How many players?"));
+      while (numPlayers < 2 || numPlayers > 8) {
+         numPlayers = Integer.valueOf(JOptionPane.showInputDialog(board, "Invalid number selected. How many players?"));
+      }
+      String[] names = new String[numPlayers];
+      for (int i = 0; i < numPlayers; i++) {
+         names[i] = JOptionPane.showInputDialog(board, String.format("Player %d name: ", i+1));
+      }
       Room[] rooms = parser.readRoomData("board.xml");
       Scene[] scenes = parser.readSceneData("cards.xml");
       int[][] upgrades = parser.getUpgradeData("board.xml");
-      b = new Board(new String[] {"a", "b", "c","d","e","f","g", "h"}, numPlayers,
-            rooms, scenes, upgrades);
+      // int numPlayers = 2;
+      // b = new Board(new String[] {"a", "b", "c","d","e","f","g", "h"}, numPlayers,
+            // rooms, scenes, upgrades);
+      b = new Board(names, numPlayers, rooms, scenes, upgrades);
       Random rnd = new Random();
       Room[] sets = b.sets;
       b.setActivePlayer(rnd.nextInt(numPlayers));

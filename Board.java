@@ -17,6 +17,10 @@ public class Board {
 
     private int deckIndex = 0;
 
+    public Room[] getRooms() {
+        return this.sets;
+    }
+
     public void resetSceneCards(){
         for (int i = 0; i < sets.length; i++){
             if(sets[i] != getRoomByName("trailers") && sets[i] != getRoomByName("office")){
