@@ -30,14 +30,12 @@ public class Set extends Room{
 	    for (int i = 0; i < playerList.length; i++){
 	        playerList[i].resetPracticeChips();
 	        playerList[i].resetRole();
-            playerList[i].setWorking(false);
 	    }
         wrapped = true;
         Player[] myExtras = this.getExtras();
         for (int i = 0; i < myExtras.length; i++){
 	        myExtras[i].resetPracticeChips();
 	        myExtras[i].resetRole();
-            myExtras[i].setWorking(false);
 	    }
 
         this.extras = new ArrayList<Player>();
