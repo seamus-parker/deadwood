@@ -87,7 +87,6 @@ public class BoardLayersListener extends JFrame {
 
    // Player info labels
    JLabel currentPlayerLabel = new JLabel("Current player:");
-   JLabel playerNameLabel = new JLabel();
    JLabel playerMoneyLabel = new JLabel();
    JLabel playerCreditsLabel = new JLabel();
    JLabel playerLocationLabel = new JLabel();
@@ -289,7 +288,6 @@ public class BoardLayersListener extends JFrame {
 
       // Create player info display
       currentPlayerLabel.setBounds(icon.getIconWidth() + 10, 420, 100, 20);
-      playerNameLabel.setBounds(icon.getIconWidth() + 97, 420, 100, 20);
       playerMoneyLabel.setBounds(icon.getIconWidth() + 10, 440, 100, 20);
       playerCreditsLabel.setBounds(icon.getIconWidth() + 10, 460, 100, 20);
       playerLocationLabel.setBounds(icon.getIconWidth() + 10, 480, 200, 20);
@@ -297,7 +295,6 @@ public class BoardLayersListener extends JFrame {
       playerPracticeChipsLabel.setBounds(icon.getIconWidth() + 10, 520, 200, 20);
 
       bPane.add(currentPlayerLabel, Integer.valueOf(2));
-      bPane.add(playerNameLabel, Integer.valueOf(2));
       bPane.add(playerMoneyLabel, Integer.valueOf(2));
       bPane.add(playerCreditsLabel, Integer.valueOf(2));
       bPane.add(playerLocationLabel, Integer.valueOf(2));
@@ -569,7 +566,7 @@ public class BoardLayersListener extends JFrame {
    // display player info (Player p)
 
    public void playerInfo(Player p) {
-      playerNameLabel.setText(p.getName());
+      currentPlayerLabel.setText("Active player: " + p.getName());
       playerMoneyLabel.setText("Dollars: " + Integer.toString(p.getDollars()));
       playerCreditsLabel.setText("Credits: " + Integer.toString(p.getCredits()));
       playerLocationLabel.setText("Location: " + p.getLocation().getName());
@@ -747,38 +744,143 @@ public class BoardLayersListener extends JFrame {
 
       // Controller
       public void mouseClicked(MouseEvent e){
+         Player p = b.getActivePlayer();
          Object s = e.getSource();
          if (s == bAct && bAct.isEnabled()) {
-            b.getActivePlayer().act();
+            p.act();
+            board.clearActionMenu();
+            board.actionMenu(p.getPossibleActions());
+            board.playerInfo(p);
          } 
          else if (s == bRehearse && bRehearse.isEnabled()) {
-            b.getActivePlayer().rehearsal();
-            board.playerInfo(b.getActivePlayer());
+            p.rehearsal();
+            board.playerInfo(p);
          }
          else if (s == bMove && bMove.isEnabled()){
             board.clearActionMenu();
-            board.enableMovement(b.getActivePlayer().getPossibleMoves());
+            board.enableMovement(p.getPossibleMoves());
          }
          else if (s == bTrailers) {
-            b.getActivePlayer().move(b.getRoomByName("trailer"));
-            board.moveDie(b.getActivePlayer(), b.getRoomByName("trailer"));
+            p.move(b.getRoomByName("trailer"));
+            board.moveDie(p, b.getRoomByName("trailer"));
+            board.disableMovementButtons();
+            board.actionMenu(p.getPossibleActions());
          }
+         else if (s == bMainSteet) {
+            p.move(b.getRoomByName("Main Street"));
+            board.moveDie(p, b.getRoomByName("Main Street"));
+            board.disableMovementButtons();
+            board.actionMenu(p.getPossibleActions());
+            if (p.getLocation().getCardJlabelPosition() == -1) {
+               flipSceneCard(p.getLocation());
+            }
+         }
+         else if (s == bSaloon) {
+            p.move(b.getRoomByName("Saloon"));
+            board.moveDie(p, b.getRoomByName("Saloon"));
+            board.disableMovementButtons();
+            board.actionMenu(p.getPossibleActions());
+            if (p.getLocation().getCardJlabelPosition() == -1) {
+               flipSceneCard(p.getLocation());
+            }
+         }
+         else if (s == bGeneralStore) {
+            p.move(b.getRoomByName("General Store"));
+            board.moveDie(p, b.getRoomByName("General Store"));
+            board.disableMovementButtons();
+            board.actionMenu(p.getPossibleActions());
+            if (p.getLocation().getCardJlabelPosition() == -1) {
+               flipSceneCard(p.getLocation());
+            }
+         }
+         else if (s == bTrainStation) {
+            p.move(b.getRoomByName("Train Station"));
+            board.moveDie(p, b.getRoomByName("Train Station"));
+            board.disableMovementButtons();
+            board.actionMenu(p.getPossibleActions());
+            if (p.getLocation().getCardJlabelPosition() == -1) {
+               flipSceneCard(p.getLocation());
+            }
+         }
+         else if (s == bJail) {
+            p.move(b.getRoomByName("Jail"));
+            board.moveDie(p, b.getRoomByName("Jail"));
+            board.disableMovementButtons();
+            board.actionMenu(p.getPossibleActions());
+            if (p.getLocation().getCardJlabelPosition() == -1) {
+               flipSceneCard(p.getLocation());
+            }
+         }
+         else if (s == bCastingOffice) {
+            p.move(b.getRoomByName("office"));
+            board.moveDie(p, b.getRoomByName("office"));
+            board.disableMovementButtons();
+            board.actionMenu(p.getPossibleActions());
+         }
+         else if (s == bRanch) {
+            p.move(b.getRoomByName("Ranch"));
+            board.moveDie(p, b.getRoomByName("Ranch"));
+            board.disableMovementButtons();
+            board.actionMenu(p.getPossibleActions());
+            if (p.getLocation().getCardJlabelPosition() == -1) {
+               flipSceneCard(p.getLocation());
+            }
+         }
+         else if (s == bSecretHideout) {
+            p.move(b.getRoomByName("Secret Hideout"));
+            board.moveDie(p, b.getRoomByName("Secret Hideout"));
+            board.disableMovementButtons();
+            board.actionMenu(p.getPossibleActions());
+            if (p.getLocation().getCardJlabelPosition() == -1) {
+               flipSceneCard(p.getLocation());
+            }
+         }
+         else if (s == bChurch) {
+            p.move(b.getRoomByName("Church"));
+            board.moveDie(p, b.getRoomByName("Church"));
+            board.disableMovementButtons();
+            board.actionMenu(p.getPossibleActions());
+            if (p.getLocation().getCardJlabelPosition() == -1) {
+               flipSceneCard(p.getLocation());
+            }
+         }
+         else if (s == bBank) {
+            p.move(b.getRoomByName("Bank"));
+            board.moveDie(p, b.getRoomByName("Bank"));
+            board.disableMovementButtons();
+            board.actionMenu(p.getPossibleActions());
+            if (p.getLocation().getCardJlabelPosition() == -1) {
+               flipSceneCard(p.getLocation());
+            }
+         }
+         else if (s == bHotel) {
+            p.move(b.getRoomByName("Hotel"));
+            board.moveDie(p, b.getRoomByName("Hotel"));
+            board.disableMovementButtons();
+            board.actionMenu(p.getPossibleActions());
+            if (p.getLocation().getCardJlabelPosition() == -1) {
+               flipSceneCard(p.getLocation());
+            }
+         }
+         
+         
          else if (s == bTakeRole && bTakeRole.isEnabled()) {
             board.clearActionMenu();
-            board.roleMenu(b.getActivePlayer());
+            board.roleMenu(p);
          }
          else if (s == bUpgrade && bUpgrade.isEnabled()) {
             board.clearActionMenu();
-            board.upgradeMenu(b.getActivePlayer(), b.getUpgrades());
+            board.upgradeMenu(p, b.getUpgrades());
          }
          else if (s == bEndTurn) {
+            p.endTurn();
             b.nextPlayer();
             board.beginPlayerTurn(b.getActivePlayer());
          }
          else if (s == bCancel) {
             board.clearRoleMenu();
             board.disableMovementButtons();
-            board.actionMenu(b.getActivePlayer().getPossibleActions());
+            board.actionMenu(p.getPossibleActions());
          }
 
          else if (s == bEndGame){
@@ -786,27 +888,29 @@ public class BoardLayersListener extends JFrame {
             board.dispose();
          }
          else if (roleButtons[0].isVisible()) {
-            ArrayList<Role> possible = b.getActivePlayer().getPossibleRoles();
+            ArrayList<Role> possible = p.getPossibleRoles();
             for (int i = 0; i < possible.size(); i++) {
-               if (s == b) {
-                  b.getActivePlayer().acceptRole(possible.get(i));
-                  board.assignRole(b.getActivePlayer(), possible.get(i));
+               if (s == roleButtons[i]) {
+                  p.acceptRole(possible.get(i));
+                  board.assignRole(p, possible.get(i));
+                  board.clearRoleMenu();
+                  board.actionMenu(p.getPossibleActions());
                }
             }
          }
          else if (upgradeButtons[0].isVisible()) {
-            ArrayList<int[]> possible = b.getActivePlayer().getPossibleUpgrades(b.getUpgrades());
+            ArrayList<int[]> possible = p.getPossibleUpgrades(b.getUpgrades());
             for (int i = 0; i < possible.size(); i++) {
                if (s == b) {
-                  b.getActivePlayer().upgradeRank(possible.get(i)[0]);
+                  p.upgradeRank(possible.get(i)[0]);
                   if (possible.get(i)[3] == 0) {
-                     b.getActivePlayer().removeDollars(possible.get(i)[1]);
+                     p.removeDollars(possible.get(i)[1]);
                   }
                   else if (possible.get(i)[3] == 1) {
-                     b.getActivePlayer().removeCredits(possible.get(i)[1]);
+                     p.removeCredits(possible.get(i)[1]);
                   }
-                  // board.scalePlayerDown(b.getActivePlayer(), b.getRoomByName("office"));
-                  board.playerInfo(b.getActivePlayer());
+                  board.scalePlayerDown(p, b.getRoomByName("office"));
+                  board.playerInfo(p);
                }
             }
          }
