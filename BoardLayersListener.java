@@ -303,7 +303,7 @@ public class BoardLayersListener extends JFrame {
       
       // create event info display
       eventInfoDisplay.setBounds(icon.getIconWidth()+10, 550, 200, 200);
-      eventInfoDisplay.setText("<html>This is<br>a multi-line string");
+      eventInfoDisplay.setText("<html>Welcome to DEADWOOD<br>Good Luck!");
       bPane.add(eventInfoDisplay, Integer.valueOf(2));
 
       // Create shot counters
@@ -741,14 +741,52 @@ public class BoardLayersListener extends JFrame {
    // TODO: event info display
    // create display
    // playerActed
+   public void playerActedED(Player player, boolean result){
+      if (result == true){
+         if (player.getCurrentRole().isOnCard()){
+            eventInfoDisplay.setText("<html>"+player.getName()+" has acted succesfully.<br>They recived 2 Credits for thier work");
+         }else{
+            eventInfoDisplay.setText("<html>"+player.getName()+" has acted succesfully.<br>They recived 1 Dollar and 1 Credit");
+         }
+      }else if(player.getCurrentRole().isOnCard()) {
+         eventInfoDisplay.setText("<html>"+player.getName()+" has acted unsuccesfully.<br> They recived nothing");
+      }else{
+         eventInfoDisplay.setText("<html>"+player.getName()+" has acted unsuccesfully.<br>They recived 1 Dollar for thier effort");
+      }
+   }
+
    // playerMoved
+   public void playerMovedED(Player player){
+      eventInfoDisplay.setText("<html>"+player.getName()+" has moved .<br>"+ player.getName()+"is now located in the "+player.getLocation().getName());
+   }
    // playerRehearsed
+   public void playerRehearsedED(Player player){
+      eventInfoDisplay.setText("<html>"+player.getName()+" has reheasred.<br>"+player.getName()+ "gained + 1 practice chips");
+   }
    // playerUpgraded
+   public void playerUpgradedED(Player player){
+      eventInfoDisplay.setText("<html>"+player.getName()+" has upgraded their rank.<br>"+player.getName()+"was "+ (player.getRank()-1) +"and thier new rank is "+player.getRank());
+   }
    // playerTurnBegan
+   public void playerTurnBeganED(Player player){
+      eventInfoDisplay.setText("<html>"+player.getName()+" has begun thier turn.<br> What will thier next move be?");
+   }
    // gameEnded
+   public void gameEndedED(Player player){
+      eventInfoDisplay.setText("<html> The game has ended!"+player.getName()+" is the winner.<br>");
+   }
    // playerTookRole
+   public void playerTookRoleED(Player player){
+      eventInfoDisplay.setText("<html>"+player.getName()+" has accepted a new role.<br>"+player.getName()+"is now the the"+player.getCurrentRole().getName());
+   }
    // sceneWrapped
+   public void sceneWrappedED(Room room){
+      eventInfoDisplay.setText("<html>"+room.getName() +" has finished filming.<br>");
+   }
    // dayEnded
+   public void dayEndedED(){
+      eventInfoDisplay.setText("<html>The day has ended.<br>The Board has been reset and new scene cards added");
+   }
 
 
    class boardMouseListener implements MouseListener{
