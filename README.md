@@ -26,6 +26,7 @@ In certain cases such as selecting move location and desired role, you must type
 
 
 GUI update
+
 Program is complied and ran the similar to before, command line arguments are no longer necassary however.
 When ran the player is asked how many players. if the number of players is outside the 2-8 range the program prompts again
 (inputing letters will cause an error) 
