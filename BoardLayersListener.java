@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class BoardLayersListener extends JFrame {
 
-   private static BoardLayersListener board;
+   private BoardLayersListener board = this;
    private static Board b;
    // JLabels
    JLabel boardlabel;
@@ -92,7 +92,8 @@ public class BoardLayersListener extends JFrame {
    JLabel playerLocationLabel = new JLabel();
    JLabel playerRankLabel = new JLabel();
    JLabel playerPracticeChipsLabel = new JLabel();
-   // JLabel playerDiceLabel = new JLabel();
+   JLabel playerDiceLabel = new JLabel();
+   JLabel currentDayLabel = new JLabel();
 
    // Player dice labels
    JLabel[] playerJLabels = new JLabel[8];
@@ -108,13 +109,15 @@ public class BoardLayersListener extends JFrame {
 
   public BoardLayersListener() {}
 
-  public BoardLayersListener(int numOfPlayers, Room[] rooms) {
+  public BoardLayersListener(int numOfPlayers, Room[] rooms, Board myBoard) {
       
        // Set the title of the JFrame
        super("Deadwood");
        // Set the exit option for the JFrame
        setDefaultCloseOperation(EXIT_ON_CLOSE);
       
+       b = myBoard;
+
        // Create the JLayeredPane to hold the display, cards, dice and buttons
        bPane = getLayeredPane();
     
@@ -129,19 +132,7 @@ public class BoardLayersListener extends JFrame {
       
        // Set the size of the GUI
        setSize(icon.getIconWidth()+300,icon.getIconHeight()+75);
-       
-       // test code for adding scene card locations
-       cardlabel = new JLabel();
-       ImageIcon cIcon =  new ImageIcon("img/CardBack-small.jpg");
-       cardlabel.setIcon(cIcon); 
-      //  cardlabel.setBounds(969,28,205,115);
-       cardlabel.setOpaque(true);
-      
-       // Add the card to the lower layer
-       bPane.add(cardlabel, Integer.valueOf(1));
-       
-       //call function place players icon in starting locations
-       
+              
        //set the card backs on all rooms
        for(int i=0; i<rooms.length; i++){
          if(rooms[i].getShots()>0){
@@ -180,16 +171,6 @@ public class BoardLayersListener extends JFrame {
          playerJLabels[i].setVisible(true);
          bPane.add(playerJLabels[i], Integer.valueOf(3));
       }
-      
-
-
-
-
-
-
-
-
-      
        // Create the Menu for action buttons
        mLabel = new JLabel("MENU");
        mLabel.setBounds(icon.getIconWidth()+40,0,100,20);
@@ -235,7 +216,7 @@ public class BoardLayersListener extends JFrame {
       bSecretHideout.setBounds(20, 850, 210, 40);
       bPane.add(bSecretHideout, Integer.valueOf(2));
 
-      bChurch.setBounds(icon.getIconWidth() - 525, 855, 100, 35);
+      bChurch.setBounds(icon.getIconWidth() - 525, 855, 120, 35);
       bPane.add(bChurch, Integer.valueOf(2));
 
       bHotel.setBounds(icon.getIconWidth() - 190, 862, 100, 30);
@@ -268,8 +249,6 @@ public class BoardLayersListener extends JFrame {
          yLoc += 30;      
       }
 
-      // addSceneBacks(sets);
-
       // create upgrade buttons
       int[][] upgradeCosts = {{4,10,18,28,40},{5,10,15,20,25}};
       String currency = "dollars";
@@ -294,7 +273,8 @@ public class BoardLayersListener extends JFrame {
       playerLocationLabel.setBounds(icon.getIconWidth() + 10, 480, 200, 20);
       playerRankLabel.setBounds(icon.getIconWidth() + 10, 500, 100, 20);
       playerPracticeChipsLabel.setBounds(icon.getIconWidth() + 10, 520, 200, 20);
-      // playerDiceLabel.setBounds(icon.getIconHeight() + 50, 450, 46, 46);
+      playerDiceLabel.setBounds(icon.getIconWidth() + 200, 450, 46, 46);
+      currentDayLabel.setBounds(icon.getIconWidth() + 10, 540, 200, 20);
 
       bPane.add(currentPlayerLabel, Integer.valueOf(2));
       bPane.add(playerMoneyLabel, Integer.valueOf(2));
@@ -302,7 +282,9 @@ public class BoardLayersListener extends JFrame {
       bPane.add(playerLocationLabel, Integer.valueOf(2));
       bPane.add(playerRankLabel, Integer.valueOf(2));
       bPane.add(playerPracticeChipsLabel, Integer.valueOf(2));
-      // bPane.add(playerDiceLabel, Integer.valueOf(2));
+      bPane.add(playerDiceLabel, Integer.valueOf(2));
+      bPane.add(currentDayLabel, Integer.valueOf(2));
+      
       
       // create event info display
       eventInfoDisplay.setBounds(icon.getIconWidth()+10, 550, 200, 200);
@@ -329,28 +311,12 @@ public class BoardLayersListener extends JFrame {
             curRoom++;
          }
       }
-
-      // test actionMenu
-      // ArrayList<String> a = new ArrayList<>();
-      // a.add("work");
-      // a.add("move");
-      // actionMenu(a);
-      // clearActionMenu();
-      // test player info
-
-      // Player testPlayer = new Player("Seamus", 1, rooms[0]);
-      // testPlayer.addCredits(3);
-      // testPlayer.addDollars(12);
-      // testPlayer.upgradeRank(4);
-      // testPlayer.setLocation(rooms[1]);
-      // playerInfo(testPlayer);
-      // roleMenu(testPlayer);
-      // scalePlayerDown(testPlayer, shotXLoc, shotYLoc);
-      // moveDie(testPlayer,rooms[3]);
-      // hideSceneBacks(sets[0]);
-      
    }  
    
+   public void setNumDays (int n) {
+      currentDayLabel.setText("Days remaining: " + n);
+   }
+
    //function to hide a scene Backs once scene is completed
    public void hideSceneBack(Room room){
       int pos = room.getCardBackPos();
@@ -493,7 +459,6 @@ public class BoardLayersListener extends JFrame {
        }
    }
 
-   //to do
    public void moveDie(Player player, Room room){
       int[] corodinates = getIdleCorodinates(player, room);
       playerJLabels[player.getId()].setVisible(false);
@@ -555,17 +520,6 @@ public class BoardLayersListener extends JFrame {
       return idleCorodinatesT;
    }
    
-  
-
-
-
-
-
-
-
-
-   // TODO: implement functions
-
    // display player info (Player p)
 
    public void playerInfo(Player p) {
@@ -575,11 +529,9 @@ public class BoardLayersListener extends JFrame {
       playerLocationLabel.setText("Location: " + p.getLocation().getName());
       playerRankLabel.setText("Rank: " + p.getRank());
       playerPracticeChipsLabel.setText("Practice chips: " + p.getPracticeChips());
+      ImageIcon playerDiceIcon = new ImageIcon("img/dice/dice/"+diceStrings[p.getId()]+p.getRank()+".png");
+      playerDiceLabel.setIcon(playerDiceIcon);
    }
-
-   // display scene card (Room location, int sceneNum)
-
-   // display card back (Room location)
 
    // display action buttons (ArrayList<String> possibleActions)
    public void actionMenu(ArrayList<String> possibleActions) {
@@ -679,8 +631,6 @@ public class BoardLayersListener extends JFrame {
       bCancel.setVisible(false);
    }
 
-   // move player dice (Player player, Room location)
-
    // remove shot counters (Room location)
    public void removeShotCounter(Room location) {
       JLabel[] roomShots = getShotCounters(location);
@@ -732,18 +682,6 @@ public class BoardLayersListener extends JFrame {
       actionMenu(p.getPossibleActions());
    }
 
-   // This class implements Mouse Events
-
-   // TODO: implement functions
-   //getIdleCoordinates(Room r)
-   //scalePlayerDown(Player p, Room r)
-   //moveDie(Player p, Room r)
-   //removeScene(Room r)
-   //resetPlayerLocations(int numPlayers)
-
-   // TODO: event info display
-   // create display
-   // playerActed
    public void playerActedED(Player player, boolean result){
       if (result == true){
          if (player.getCurrentRole().isOnCard()){
@@ -797,7 +735,6 @@ public class BoardLayersListener extends JFrame {
       eventInfoDisplay.setText("<html>The day has ended. The board has been reset and new scene cards added.");
    }
 
-
    class boardMouseListener implements MouseListener{
 
       // Controller
@@ -821,17 +758,33 @@ public class BoardLayersListener extends JFrame {
                   }
                }
                if (b.activeScenes() <= 1) {
-                  board.dayEndedED();
-                  b.endDay();
-                  b.resetSceneCards();
-                  for (Player thisPlayer : b.getPlayers()) {
-                     board.scalePlayerDown(thisPlayer, b.getRoomByName("trailer"));
+                  board.setNumDays(b.getDays()-1);
+                  if (b.getDays() <= 1) {
+                     board.clearActionMenu();
+                     board.clearRoleMenu();
+                     board.clearUpgradeMenu();
+                     board.disableMovementButtons();
+                     board.gameEndedED(b.calculateWinner().get(0));
                   }
-                  p.endTurn();
-                  b.nextPlayer();
-                  for (Room r : b.getRooms()) {
-                     board.replaceShotCounters(r);
+                  else {
+                     board.dayEndedED();
+                     b.endDay();
+                     b.resetSceneCards();
+                     for (Player thisPlayer : b.getPlayers()) {
+                        board.scalePlayerDown(thisPlayer, b.getRoomByName("trailer"));
+                     }
+                     p.endTurn();
+                     b.nextPlayer();
+                     for (Room r : b.getRooms()) {
+                        if (r.getCardJlabelPosition() != -1) {
+                           board.removeSceneCard(r);
+                        }
+                        board.replaceShotCounters(r);
+                     }
                      board.makeSceneBacksVisible(b.getRooms());
+                     board.clearActionMenu();
+                     board.actionMenu(b.getActivePlayer().getPossibleActions());
+                     board.playerInfo(b.getActivePlayer());
                   }
                }
             }
@@ -841,7 +794,7 @@ public class BoardLayersListener extends JFrame {
          } 
          else if (s == bRehearse && bRehearse.isEnabled()) {
             p.rehearsal();
-            //board.actionMenu(p.getPossibleActions());
+            board.actionMenu(p.getPossibleActions());
             board.playerInfo(p);
             board.playerRehearsedED(p);
          }
@@ -1003,8 +956,6 @@ public class BoardLayersListener extends JFrame {
             board.clearUpgradeMenu();
             board.disableMovementButtons();
             board.gameEndedED(b.calculateWinner().get(0));
-            // board.setVisible(false);
-            // board.dispose();
          }
          else if (roleButtons[0].isVisible()) {
             ArrayList<Role> possible = p.getPossibleRoles();
@@ -1050,55 +1001,5 @@ public class BoardLayersListener extends JFrame {
 
       public void mouseExited(MouseEvent e) {
       }
-   }
-
-   public static void main(String[] args) throws ParserConfigurationException{
-
-      XMLParser parser = new XMLParser();
-
-      board = new BoardLayersListener();
-      int numPlayers = Integer.valueOf(JOptionPane.showInputDialog(board, "How many players?"));
-      while (numPlayers < 2 || numPlayers > 8) {
-         numPlayers = Integer.valueOf(JOptionPane.showInputDialog(board, "Invalid number selected. How many players?"));
-      }
-      String[] names = new String[numPlayers];
-      for (int i = 0; i < numPlayers; i++) {
-         names[i] = JOptionPane.showInputDialog(board, String.format("Player %d name: ", i+1));
-      }
-      Room[] rooms = parser.readRoomData("board.xml");
-      Scene[] scenes = parser.readSceneData("cards.xml");
-      int[][] upgrades = parser.getUpgradeData("board.xml");
-      // int numPlayers = 2;
-      // b = new Board(new String[] {"a", "b", "c","d","e","f","g", "h"}, numPlayers,
-            // rooms, scenes, upgrades);
-      b = new Board(names, numPlayers, rooms, scenes, upgrades);
-      Random rnd = new Random();
-      Room[] sets = b.sets;
-      b.setActivePlayer(rnd.nextInt(numPlayers));
-      b.resetSceneCards();
-      boolean gameEnded = false;
-
-      // testing =======
-
-      // for (Player testP : b.getPlayers()) {
-      //    testP.addDollars(100);
-      //    testP.addCredits(10);
-      //    testP.setLocation(b.getRoomByName("office"));
-      // }
-
-      // ===============
-      board = new BoardLayersListener(numPlayers, rooms);
-      board.setVisible(true);
-      board.beginPlayerTurn(b.getActivePlayer());
-
-
-      // Take input from the user about number of players
-      // ArrayList<String> testArray = new ArrayList<String>();
-      // Player testPlayer = new Player("Seamus", 0, rooms[0]);
-      // testPlayer.addCredits(30);
-      // testPlayer.addDollars(100);
-      // testPlayer.upgradeRank(0);
-      // testPlayer.setLocation(rooms[0]);
-      // board.upgradeMenu(testPlayer, upgrades);
    }
 }

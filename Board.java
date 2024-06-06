@@ -23,7 +23,7 @@ public class Board {
 
     public void resetSceneCards(){
         for (int i = 0; i < sets.length; i++){
-            if(sets[i] != getRoomByName("trailers") && sets[i] != getRoomByName("office")){
+            if(sets[i] != getRoomByName("trailer") && sets[i] != getRoomByName("office")){
                 for (int j = 0; j < sets[i].getRoles().length; j++) {
                     sets[i].getRoles()[j].setTaken(false);
                 }
@@ -84,6 +84,7 @@ public class Board {
    
     // Move players back to trailers and reset their states
     public void endDay() {
+        this.days -= 1;
         for (int i=0; i < players.length; i++ ){
             this.players[i].acceptRole(new Role());
             this.players[i].move(getRoomByName("trailer"));
